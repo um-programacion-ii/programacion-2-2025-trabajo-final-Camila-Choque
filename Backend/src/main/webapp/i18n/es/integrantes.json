@@ -1,0 +1,26 @@
+{
+  "backendApp": {
+    "integrantes": {
+      "home": {
+        "title": "Integrantes",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Integrantes",
+        "createOrEditLabel": "Crear o editar Integrantes",
+        "notFound": "Ningún Integrantes encontrado"
+      },
+      "created": "Un nuevo Integrantes ha sido creado con el identificador {{ param }}",
+      "updated": "Un Integrantes ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Integrantes ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Integrantes {{ id }}?"
+      },
+      "detail": {
+        "title": "Integrantes"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "apellido": "Apellido",
+      "identificacion": "Identificacion"
+    }
+  }
+}

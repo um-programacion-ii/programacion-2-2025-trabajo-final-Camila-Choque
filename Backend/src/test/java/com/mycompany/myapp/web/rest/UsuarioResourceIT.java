@@ -350,11 +350,12 @@ class UsuarioResourceIT {
         partialUpdatedUsuario.setId(usuario.getId());
 
         partialUpdatedUsuario
+            .username(UPDATED_USERNAME)
             .password(UPDATED_PASSWORD)
+            .lastName(UPDATED_LAST_NAME)
             .email(UPDATED_EMAIL)
+            .nombreAlumno(UPDATED_NOMBRE_ALUMNO)
             .descripcionProyecto(UPDATED_DESCRIPCION_PROYECTO)
-            .jwtToken(UPDATED_JWT_TOKEN)
-            .fechaRegistro(UPDATED_FECHA_REGISTRO)
             .name(UPDATED_NAME);
 
         restUsuarioMockMvc

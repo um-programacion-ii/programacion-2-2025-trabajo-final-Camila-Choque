@@ -20,6 +20,11 @@
 
     <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20251112213120_added_entity_Usuario.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251112214418_added_entity_Evento.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251112214712_added_entity_Integrantes.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251112215057_added_entity_Venta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251112215239_added_entity_Asientos.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20251112215741_added_entity_Sesion.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->

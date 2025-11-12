@@ -1,0 +1,31 @@
+{
+  "annotations": {
+    "changelogDate": "20251112215239"
+  },
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "fila",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "columna",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "persona",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": false,
+  "name": "Asientos",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

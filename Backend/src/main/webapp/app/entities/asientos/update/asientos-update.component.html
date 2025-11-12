@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-asientos-heading" data-cy="AsientosCreateUpdateHeading" jhiTranslate="backendApp.asientos.home.createOrEditLabel">
+        Crear o editar Asientos
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="backendApp.asientos.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_fila" jhiTranslate="backendApp.asientos.fila">Fila</label>
+          <input type="number" class="form-control" name="fila" id="field_fila" data-cy="fila" formControlName="fila" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_columna" jhiTranslate="backendApp.asientos.columna">Columna</label>
+          <input type="number" class="form-control" name="columna" id="field_columna" data-cy="columna" formControlName="columna" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_persona" jhiTranslate="backendApp.asientos.persona">Persona</label>
+          <input type="text" class="form-control" name="persona" id="field_persona" data-cy="persona" formControlName="persona" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_estado" jhiTranslate="backendApp.asientos.estado">Estado</label>
+          <input type="text" class="form-control" name="estado" id="field_estado" data-cy="estado" formControlName="estado" />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancelar</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Guardar</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

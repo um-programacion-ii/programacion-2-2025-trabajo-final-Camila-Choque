@@ -1,0 +1,42 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (integrantes(); as integrantesRef) {
+      <div>
+        <h2 data-cy="integrantesDetailsHeading"><span jhiTranslate="backendApp.integrantes.detail.title">Integrantes</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ integrantesRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.integrantes.nombre">Nombre</span></dt>
+          <dd>
+            <span>{{ integrantesRef.nombre }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.integrantes.apellido">Apellido</span></dt>
+          <dd>
+            <span>{{ integrantesRef.apellido }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.integrantes.identificacion">Identificacion</span></dt>
+          <dd>
+            <span>{{ integrantesRef.identificacion }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Volver</span>
+        </button>
+
+        <button type="button" [routerLink]="['/integrantes', integrantesRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

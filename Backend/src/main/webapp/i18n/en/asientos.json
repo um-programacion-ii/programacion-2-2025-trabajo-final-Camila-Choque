@@ -1,0 +1,27 @@
+{
+  "backendApp": {
+    "asientos": {
+      "home": {
+        "title": "Asientos",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Asientos",
+        "createOrEditLabel": "Create or edit a Asientos",
+        "notFound": "No Asientos found"
+      },
+      "created": "A new Asientos is created with identifier {{ param }}",
+      "updated": "A Asientos is updated with identifier {{ param }}",
+      "deleted": "A Asientos is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Asientos {{ id }}?"
+      },
+      "detail": {
+        "title": "Asientos"
+      },
+      "id": "ID",
+      "fila": "Fila",
+      "columna": "Columna",
+      "persona": "Persona",
+      "estado": "Estado"
+    }
+  }
+}

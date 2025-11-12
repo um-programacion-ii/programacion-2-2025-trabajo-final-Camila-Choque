@@ -1,0 +1,43 @@
+{
+  "annotations": {
+    "changelogDate": "20251112215057"
+  },
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "ventaIdCatedra",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "fechaVenta",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "precioVenta",
+      "fieldType": "Double"
+    },
+    {
+      "fieldName": "resultado",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "descripcion",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "cantidadAsientos",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "estado",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": false,
+  "name": "Venta",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}
