@@ -1,0 +1,156 @@
+<div>
+  <h2 id="page-heading" data-cy="UsuarioHeading">
+    <span jhiTranslate="backendApp.usuario.home.title">Usuarios</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="backendApp.usuario.home.refreshListLabel">Refrescar lista</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-usuario"
+        [routerLink]="['/usuario/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="backendApp.usuario.home.createLabel">Crear nuevo Usuario</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error />
+
+  <jhi-alert />
+
+  @if (usuarios().length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="backendApp.usuario.home.notFound">Ningún Usuarios encontrado</span>
+    </div>
+  } @else {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(sortState)]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="username">
+              <div class="d-flex">
+                <span jhiTranslate="backendApp.usuario.username">Username</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="password">
+              <div class="d-flex">
+                <span jhiTranslate="backendApp.usuario.password">Password</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="firstName">
+              <div class="d-flex">
+                <span jhiTranslate="backendApp.usuario.firstName">First Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="lastName">
+              <div class="d-flex">
+                <span jhiTranslate="backendApp.usuario.lastName">Last Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="email">
+              <div class="d-flex">
+                <span jhiTranslate="backendApp.usuario.email">Email</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nombreAlumno">
+              <div class="d-flex">
+                <span jhiTranslate="backendApp.usuario.nombreAlumno">Nombre Alumno</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="descripcionProyecto">
+              <div class="d-flex">
+                <span jhiTranslate="backendApp.usuario.descripcionProyecto">Descripcion Proyecto</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="jwtToken">
+              <div class="d-flex">
+                <span jhiTranslate="backendApp.usuario.jwtToken">Jwt Token</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="fechaRegistro">
+              <div class="d-flex">
+                <span jhiTranslate="backendApp.usuario.fechaRegistro">Fecha Registro</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="name">
+              <div class="d-flex">
+                <span jhiTranslate="backendApp.usuario.name">Name</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (usuario of usuarios(); track trackId(usuario)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/usuario', usuario.id, 'view']">{{ usuario.id }}</a>
+              </td>
+              <td>{{ usuario.username }}</td>
+              <td>{{ usuario.password }}</td>
+              <td>{{ usuario.firstName }}</td>
+              <td>{{ usuario.lastName }}</td>
+              <td>{{ usuario.email }}</td>
+              <td>{{ usuario.nombreAlumno }}</td>
+              <td>{{ usuario.descripcionProyecto }}</td>
+              <td>{{ usuario.jwtToken }}</td>
+              <td>{{ usuario.fechaRegistro | formatMediumDate }}</td>
+              <td>{{ usuario.name }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/usuario', usuario.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Vista</span>
+                  </a>
+
+                  <a [routerLink]="['/usuario', usuario.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Editar</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(usuario)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Eliminar</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+</div>

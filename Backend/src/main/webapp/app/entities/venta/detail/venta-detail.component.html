@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (venta(); as ventaRef) {
+      <div>
+        <h2 data-cy="ventaDetailsHeading"><span jhiTranslate="backendApp.venta.detail.title">Venta</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ ventaRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.venta.ventaIdCatedra">Venta Id Catedra</span></dt>
+          <dd>
+            <span>{{ ventaRef.ventaIdCatedra }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.venta.fechaVenta">Fecha Venta</span></dt>
+          <dd>
+            <span>{{ ventaRef.fechaVenta | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.venta.precioVenta">Precio Venta</span></dt>
+          <dd>
+            <span>{{ ventaRef.precioVenta }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.venta.resultado">Resultado</span></dt>
+          <dd>
+            <span>{{ ventaRef.resultado }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.venta.descripcion">Descripcion</span></dt>
+          <dd>
+            <span>{{ ventaRef.descripcion }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.venta.cantidadAsientos">Cantidad Asientos</span></dt>
+          <dd>
+            <span>{{ ventaRef.cantidadAsientos }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.venta.estado">Estado</span></dt>
+          <dd>
+            <span>{{ ventaRef.estado }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Volver</span>
+        </button>
+
+        <button type="button" [routerLink]="['/venta', ventaRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

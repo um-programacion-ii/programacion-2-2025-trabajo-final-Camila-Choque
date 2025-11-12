@@ -1,0 +1,111 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-venta-heading" data-cy="VentaCreateUpdateHeading" jhiTranslate="backendApp.venta.home.createOrEditLabel">
+        Crear o editar Venta
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="backendApp.venta.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_ventaIdCatedra" jhiTranslate="backendApp.venta.ventaIdCatedra">Venta Id Catedra</label>
+          <input
+            type="number"
+            class="form-control"
+            name="ventaIdCatedra"
+            id="field_ventaIdCatedra"
+            data-cy="ventaIdCatedra"
+            formControlName="ventaIdCatedra"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_fechaVenta" jhiTranslate="backendApp.venta.fechaVenta">Fecha Venta</label>
+          <div class="input-group">
+            <input
+              id="field_fechaVenta"
+              data-cy="fechaVenta"
+              type="text"
+              class="form-control"
+              name="fechaVenta"
+              ngbDatepicker
+              #fechaVentaDp="ngbDatepicker"
+              formControlName="fechaVenta"
+            />
+            <button type="button" class="btn btn-secondary" (click)="fechaVentaDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_precioVenta" jhiTranslate="backendApp.venta.precioVenta">Precio Venta</label>
+          <input
+            type="number"
+            class="form-control"
+            name="precioVenta"
+            id="field_precioVenta"
+            data-cy="precioVenta"
+            formControlName="precioVenta"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_resultado" jhiTranslate="backendApp.venta.resultado">Resultado</label>
+          <input type="checkbox" class="form-check" name="resultado" id="field_resultado" data-cy="resultado" formControlName="resultado" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_descripcion" jhiTranslate="backendApp.venta.descripcion">Descripcion</label>
+          <input
+            type="text"
+            class="form-control"
+            name="descripcion"
+            id="field_descripcion"
+            data-cy="descripcion"
+            formControlName="descripcion"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_cantidadAsientos" jhiTranslate="backendApp.venta.cantidadAsientos">Cantidad Asientos</label>
+          <input
+            type="number"
+            class="form-control"
+            name="cantidadAsientos"
+            id="field_cantidadAsientos"
+            data-cy="cantidadAsientos"
+            formControlName="cantidadAsientos"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_estado" jhiTranslate="backendApp.venta.estado">Estado</label>
+          <input type="text" class="form-control" name="estado" id="field_estado" data-cy="estado" formControlName="estado" />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancelar</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Guardar</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

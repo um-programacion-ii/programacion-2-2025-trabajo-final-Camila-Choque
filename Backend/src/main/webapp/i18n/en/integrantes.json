@@ -1,0 +1,26 @@
+{
+  "backendApp": {
+    "integrantes": {
+      "home": {
+        "title": "Integrantes",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Integrantes",
+        "createOrEditLabel": "Create or edit a Integrantes",
+        "notFound": "No Integrantes found"
+      },
+      "created": "A new Integrantes is created with identifier {{ param }}",
+      "updated": "A Integrantes is updated with identifier {{ param }}",
+      "deleted": "A Integrantes is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Integrantes {{ id }}?"
+      },
+      "detail": {
+        "title": "Integrantes"
+      },
+      "id": "ID",
+      "nombre": "Nombre",
+      "apellido": "Apellido",
+      "identificacion": "Identificacion"
+    }
+  }
+}
