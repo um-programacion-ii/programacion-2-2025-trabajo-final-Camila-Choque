@@ -2,13 +2,17 @@ import { Component, OnInit, inject } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { finalize } from 'rxjs/operators';
+import { finalize, map } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { IAsientos } from '../asientos.model';
+import { IVenta } from 'app/entities/venta/venta.model';
+import { VentaService } from 'app/entities/venta/service/venta.service';
+import { ISesion } from 'app/entities/sesion/sesion.model';
+import { SesionService } from 'app/entities/sesion/service/sesion.service';
 import { AsientosService } from '../service/asientos.service';
+import { IAsientos } from '../asientos.model';
 import { AsientosFormGroup, AsientosFormService } from './asientos-form.service';
 
 @Component({
@@ -20,12 +24,21 @@ export class AsientosUpdateComponent implements OnInit {
   isSaving = false;
   asientos: IAsientos | null = null;
 
+  ventasSharedCollection: IVenta[] = [];
+  sesionsSharedCollection: ISesion[] = [];
+
   protected asientosService = inject(AsientosService);
   protected asientosFormService = inject(AsientosFormService);
+  protected ventaService = inject(VentaService);
+  protected sesionService = inject(SesionService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: AsientosFormGroup = this.asientosFormService.createAsientosFormGroup();
+
+  compareVenta = (o1: IVenta | null, o2: IVenta | null): boolean => this.ventaService.compareVenta(o1, o2);
+
+  compareSesion = (o1: ISesion | null, o2: ISesion | null): boolean => this.sesionService.compareSesion(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ asientos }) => {
@@ -33,6 +46,8 @@ export class AsientosUpdateComponent implements OnInit {
       if (asientos) {
         this.updateForm(asientos);
       }
+
+      this.loadRelationshipsOptions();
     });
   }
 
@@ -72,5 +87,25 @@ export class AsientosUpdateComponent implements OnInit {
   protected updateForm(asientos: IAsientos): void {
     this.asientos = asientos;
     this.asientosFormService.resetForm(this.editForm, asientos);
+
+    this.ventasSharedCollection = this.ventaService.addVentaToCollectionIfMissing<IVenta>(this.ventasSharedCollection, asientos.venta);
+    this.sesionsSharedCollection = this.sesionService.addSesionToCollectionIfMissing<ISesion>(
+      this.sesionsSharedCollection,
+      asientos.sesion,
+    );
+  }
+
+  protected loadRelationshipsOptions(): void {
+    this.ventaService
+      .query()
+      .pipe(map((res: HttpResponse<IVenta[]>) => res.body ?? []))
+      .pipe(map((ventas: IVenta[]) => this.ventaService.addVentaToCollectionIfMissing<IVenta>(ventas, this.asientos?.venta)))
+      .subscribe((ventas: IVenta[]) => (this.ventasSharedCollection = ventas));
+
+    this.sesionService
+      .query()
+      .pipe(map((res: HttpResponse<ISesion[]>) => res.body ?? []))
+      .pipe(map((sesions: ISesion[]) => this.sesionService.addSesionToCollectionIfMissing<ISesion>(sesions, this.asientos?.sesion)))
+      .subscribe((sesions: ISesion[]) => (this.sesionsSharedCollection = sesions));
   }
 }

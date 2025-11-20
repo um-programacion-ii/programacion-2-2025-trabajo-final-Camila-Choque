@@ -17,6 +17,8 @@ public class IntegrantesDTO implements Serializable {
 
     private String identificacion;
 
+    private EventoDTO evento;
+
     public Long getId() {
         return id;
     }
@@ -49,6 +51,14 @@ public class IntegrantesDTO implements Serializable {
         this.identificacion = identificacion;
     }
 
+    public EventoDTO getEvento() {
+        return evento;
+    }
+
+    public void setEvento(EventoDTO evento) {
+        this.evento = evento;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -78,6 +88,7 @@ public class IntegrantesDTO implements Serializable {
             ", nombre='" + getNombre() + "'" +
             ", apellido='" + getApellido() + "'" +
             ", identificacion='" + getIdentificacion() + "'" +
+            ", evento=" + getEvento() +
             "}";
     }
 }

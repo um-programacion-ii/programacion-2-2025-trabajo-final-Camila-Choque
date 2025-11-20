@@ -19,6 +19,10 @@ public class AsientosDTO implements Serializable {
 
     private String estado;
 
+    private VentaDTO venta;
+
+    private SesionDTO sesion;
+
     public Long getId() {
         return id;
     }
@@ -59,6 +63,22 @@ public class AsientosDTO implements Serializable {
         this.estado = estado;
     }
 
+    public VentaDTO getVenta() {
+        return venta;
+    }
+
+    public void setVenta(VentaDTO venta) {
+        this.venta = venta;
+    }
+
+    public SesionDTO getSesion() {
+        return sesion;
+    }
+
+    public void setSesion(SesionDTO sesion) {
+        this.sesion = sesion;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -89,6 +109,8 @@ public class AsientosDTO implements Serializable {
             ", columna=" + getColumna() +
             ", persona='" + getPersona() + "'" +
             ", estado='" + getEstado() + "'" +
+            ", venta=" + getVenta() +
+            ", sesion=" + getSesion() +
             "}";
     }
 }

@@ -23,6 +23,7 @@ describe('Integrantes Form Service', () => {
             nombre: expect.any(Object),
             apellido: expect.any(Object),
             identificacion: expect.any(Object),
+            evento: expect.any(Object),
           }),
         );
       });
@@ -36,6 +37,7 @@ describe('Integrantes Form Service', () => {
             nombre: expect.any(Object),
             apellido: expect.any(Object),
             identificacion: expect.any(Object),
+            evento: expect.any(Object),
           }),
         );
       });

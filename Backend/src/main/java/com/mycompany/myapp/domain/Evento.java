@@ -1,8 +1,11 @@
 package com.mycompany.myapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A Evento.
@@ -13,7 +16,6 @@ import java.time.LocalDate;
 public class Evento implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
@@ -59,6 +61,10 @@ public class Evento implements Serializable {
 
     @Column(name = "ultima_actualizacion")
     private LocalDate ultimaActualizacion;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "evento")
+    @JsonIgnoreProperties(value = { "evento" }, allowSetters = true)
+    private Set<Integrantes> integrantes = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -242,6 +248,37 @@ public class Evento implements Serializable {
 
     public void setUltimaActualizacion(LocalDate ultimaActualizacion) {
         this.ultimaActualizacion = ultimaActualizacion;
+    }
+
+    public Set<Integrantes> getIntegrantes() {
+        return this.integrantes;
+    }
+
+    public void setIntegrantes(Set<Integrantes> integrantes) {
+        if (this.integrantes != null) {
+            this.integrantes.forEach(i -> i.setEvento(null));
+        }
+        if (integrantes != null) {
+            integrantes.forEach(i -> i.setEvento(this));
+        }
+        this.integrantes = integrantes;
+    }
+
+    public Evento integrantes(Set<Integrantes> integrantes) {
+        this.setIntegrantes(integrantes);
+        return this;
+    }
+
+    public Evento addIntegrantes(Integrantes integrantes) {
+        this.integrantes.add(integrantes);
+        integrantes.setEvento(this);
+        return this;
+    }
+
+    public Evento removeIntegrantes(Integrantes integrantes) {
+        this.integrantes.remove(integrantes);
+        integrantes.setEvento(null);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

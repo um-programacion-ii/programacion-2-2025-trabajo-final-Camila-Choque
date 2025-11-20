@@ -61,7 +61,16 @@
   "name": "Evento",
   "pagination": "no",
   "readOnly": false,
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "integrantes",
+      "otherEntityRelationshipName": "evento",
+      "relationshipName": "integrantes",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
   "searchEngine": "no",
   "service": "serviceImpl"
 }

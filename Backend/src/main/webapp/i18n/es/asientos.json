@@ -21,7 +21,9 @@
       "fila": "Fila",
       "columna": "Columna",
       "persona": "Persona",
-      "estado": "Estado"
+      "estado": "Estado",
+      "venta": "Venta",
+      "sesion": "Sesion"
     }
   }
 }

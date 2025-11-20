@@ -60,6 +60,9 @@ public class AsientosAsserts {
      * @param actual the actual entity
      */
     public static void assertAsientosUpdatableRelationshipsEquals(Asientos expected, Asientos actual) {
-        // empty method
+        assertThat(actual)
+            .as("Verify Asientos relationships")
+            .satisfies(a -> assertThat(a.getVenta()).as("check venta").isEqualTo(expected.getVenta()))
+            .satisfies(a -> assertThat(a.getSesion()).as("check sesion").isEqualTo(expected.getSesion()));
     }
 }

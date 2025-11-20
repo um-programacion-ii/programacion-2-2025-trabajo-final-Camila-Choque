@@ -21,6 +21,7 @@ type IntegrantesFormGroupContent = {
   nombre: FormControl<IIntegrantes['nombre']>;
   apellido: FormControl<IIntegrantes['apellido']>;
   identificacion: FormControl<IIntegrantes['identificacion']>;
+  evento: FormControl<IIntegrantes['evento']>;
 };
 
 export type IntegrantesFormGroup = FormGroup<IntegrantesFormGroupContent>;
@@ -43,6 +44,7 @@ export class IntegrantesFormService {
       nombre: new FormControl(integrantesRawValue.nombre),
       apellido: new FormControl(integrantesRawValue.apellido),
       identificacion: new FormControl(integrantesRawValue.identificacion),
+      evento: new FormControl(integrantesRawValue.evento),
     });
   }
 
