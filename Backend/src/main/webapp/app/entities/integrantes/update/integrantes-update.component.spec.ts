@@ -4,6 +4,8 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, from, of } from 'rxjs';
 
+import { IEvento } from 'app/entities/evento/evento.model';
+import { EventoService } from 'app/entities/evento/service/evento.service';
 import { IntegrantesService } from '../service/integrantes.service';
 import { IIntegrantes } from '../integrantes.model';
 import { IntegrantesFormService } from './integrantes-form.service';
@@ -16,6 +18,7 @@ describe('Integrantes Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let integrantesFormService: IntegrantesFormService;
   let integrantesService: IntegrantesService;
+  let eventoService: EventoService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -38,17 +41,43 @@ describe('Integrantes Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     integrantesFormService = TestBed.inject(IntegrantesFormService);
     integrantesService = TestBed.inject(IntegrantesService);
+    eventoService = TestBed.inject(EventoService);
 
     comp = fixture.componentInstance;
   });
 
   describe('ngOnInit', () => {
-    it('should update editForm', () => {
+    it('should call Evento query and add missing value', () => {
       const integrantes: IIntegrantes = { id: 4905 };
+      const evento: IEvento = { id: 11280 };
+      integrantes.evento = evento;
+
+      const eventoCollection: IEvento[] = [{ id: 11280 }];
+      jest.spyOn(eventoService, 'query').mockReturnValue(of(new HttpResponse({ body: eventoCollection })));
+      const additionalEventos = [evento];
+      const expectedCollection: IEvento[] = [...additionalEventos, ...eventoCollection];
+      jest.spyOn(eventoService, 'addEventoToCollectionIfMissing').mockReturnValue(expectedCollection);
 
       activatedRoute.data = of({ integrantes });
       comp.ngOnInit();
 
+      expect(eventoService.query).toHaveBeenCalled();
+      expect(eventoService.addEventoToCollectionIfMissing).toHaveBeenCalledWith(
+        eventoCollection,
+        ...additionalEventos.map(expect.objectContaining),
+      );
+      expect(comp.eventosSharedCollection).toEqual(expectedCollection);
+    });
+
+    it('should update editForm', () => {
+      const integrantes: IIntegrantes = { id: 4905 };
+      const evento: IEvento = { id: 11280 };
+      integrantes.evento = evento;
+
+      activatedRoute.data = of({ integrantes });
+      comp.ngOnInit();
+
+      expect(comp.eventosSharedCollection).toContainEqual(evento);
       expect(comp.integrantes).toEqual(integrantes);
     });
   });
@@ -118,6 +147,18 @@ describe('Integrantes Management Update Component', () => {
       expect(integrantesService.update).toHaveBeenCalled();
       expect(comp.isSaving).toEqual(false);
       expect(comp.previousState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Compare relationships', () => {
+    describe('compareEvento', () => {
+      it('should forward to eventoService', () => {
+        const entity = { id: 11280 };
+        const entity2 = { id: 12252 };
+        jest.spyOn(eventoService, 'compareEvento');
+        comp.compareEvento(entity, entity2);
+        expect(eventoService.compareEvento).toHaveBeenCalledWith(entity, entity2);
+      });
     });
   });
 });

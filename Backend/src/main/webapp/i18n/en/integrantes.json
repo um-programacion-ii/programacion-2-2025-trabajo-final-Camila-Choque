@@ -20,7 +20,8 @@
       "id": "ID",
       "nombre": "Nombre",
       "apellido": "Apellido",
-      "identificacion": "Identificacion"
+      "identificacion": "Identificacion",
+      "evento": "Evento"
     }
   }
 }

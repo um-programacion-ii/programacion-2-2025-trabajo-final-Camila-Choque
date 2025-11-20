@@ -31,6 +31,22 @@
           <dd>
             <span>{{ asientosRef.estado }}</span>
           </dd>
+          <dt><span jhiTranslate="backendApp.asientos.venta">Venta</span></dt>
+          <dd>
+            @if (asientos()!.venta) {
+              <div>
+                <a [routerLink]="['/venta', asientos()!.venta?.id, 'view']">{{ asientosRef.venta?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="backendApp.asientos.sesion">Sesion</span></dt>
+          <dd>
+            @if (asientos()!.sesion) {
+              <div>
+                <a [routerLink]="['/sesion', asientos()!.sesion?.id, 'view']">{{ asientosRef.sesion?.id }}</a>
+              </div>
+            }
+          </dd>
         </dl>
 
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

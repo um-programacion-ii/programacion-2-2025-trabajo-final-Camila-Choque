@@ -24,6 +24,8 @@ describe('Asientos Form Service', () => {
             columna: expect.any(Object),
             persona: expect.any(Object),
             estado: expect.any(Object),
+            venta: expect.any(Object),
+            sesion: expect.any(Object),
           }),
         );
       });
@@ -38,6 +40,8 @@ describe('Asientos Form Service', () => {
             columna: expect.any(Object),
             persona: expect.any(Object),
             estado: expect.any(Object),
+            venta: expect.any(Object),
+            sesion: expect.any(Object),
           }),
         );
       });

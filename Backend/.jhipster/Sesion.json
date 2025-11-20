@@ -29,7 +29,16 @@
   "name": "Sesion",
   "pagination": "no",
   "readOnly": false,
-  "relationships": [],
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "asientos",
+      "otherEntityRelationshipName": "sesion",
+      "relationshipName": "asientos",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
   "searchEngine": "no",
   "service": "serviceImpl"
 }

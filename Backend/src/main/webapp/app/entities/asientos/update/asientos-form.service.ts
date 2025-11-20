@@ -22,6 +22,8 @@ type AsientosFormGroupContent = {
   columna: FormControl<IAsientos['columna']>;
   persona: FormControl<IAsientos['persona']>;
   estado: FormControl<IAsientos['estado']>;
+  venta: FormControl<IAsientos['venta']>;
+  sesion: FormControl<IAsientos['sesion']>;
 };
 
 export type AsientosFormGroup = FormGroup<AsientosFormGroupContent>;
@@ -45,6 +47,8 @@ export class AsientosFormService {
       columna: new FormControl(asientosRawValue.columna),
       persona: new FormControl(asientosRawValue.persona),
       estado: new FormControl(asientosRawValue.estado),
+      venta: new FormControl(asientosRawValue.venta),
+      sesion: new FormControl(asientosRawValue.sesion),
     });
   }
 

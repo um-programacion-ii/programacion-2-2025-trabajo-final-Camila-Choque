@@ -30,7 +30,8 @@
       "eventoTipoNombre": "Evento Tipo Nombre",
       "eventoTipoDescripcion": "Evento Tipo Descripcion",
       "estado": "Estado",
-      "ultimaActualizacion": "Ultima Actualizacion"
+      "ultimaActualizacion": "Ultima Actualizacion",
+      "integrantes": "Integrantes"
     }
   }
 }

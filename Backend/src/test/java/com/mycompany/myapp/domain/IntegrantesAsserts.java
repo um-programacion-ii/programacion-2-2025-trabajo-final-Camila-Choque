@@ -59,6 +59,8 @@ public class IntegrantesAsserts {
      * @param actual the actual entity
      */
     public static void assertIntegrantesUpdatableRelationshipsEquals(Integrantes expected, Integrantes actual) {
-        // empty method
+        assertThat(actual)
+            .as("Verify Integrantes relationships")
+            .satisfies(a -> assertThat(a.getEvento()).as("check evento").isEqualTo(expected.getEvento()));
     }
 }

@@ -24,7 +24,8 @@
       "resultado": "Resultado",
       "descripcion": "Descripcion",
       "cantidadAsientos": "Cantidad Asientos",
-      "estado": "Estado"
+      "estado": "Estado",
+      "asientos": "Asientos"
     }
   }
 }

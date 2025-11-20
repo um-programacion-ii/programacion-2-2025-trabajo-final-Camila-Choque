@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
 
@@ -12,7 +13,6 @@ import java.io.Serializable;
 public class Integrantes implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
@@ -28,6 +28,10 @@ public class Integrantes implements Serializable {
 
     @Column(name = "identificacion")
     private String identificacion;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = { "integrantes" }, allowSetters = true)
+    private Evento evento;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -81,6 +85,19 @@ public class Integrantes implements Serializable {
 
     public void setIdentificacion(String identificacion) {
         this.identificacion = identificacion;
+    }
+
+    public Evento getEvento() {
+        return this.evento;
+    }
+
+    public void setEvento(Evento evento) {
+        this.evento = evento;
+    }
+
+    public Integrantes evento(Evento evento) {
+        this.setEvento(evento);
+        return this;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

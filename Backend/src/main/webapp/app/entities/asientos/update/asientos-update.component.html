@@ -34,6 +34,33 @@
           <label class="form-label" for="field_estado" jhiTranslate="backendApp.asientos.estado">Estado</label>
           <input type="text" class="form-control" name="estado" id="field_estado" data-cy="estado" formControlName="estado" />
         </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_venta" jhiTranslate="backendApp.asientos.venta">Venta</label>
+          <select class="form-control" id="field_venta" data-cy="venta" name="venta" formControlName="venta" [compareWith]="compareVenta">
+            <option [ngValue]="null"></option>
+            @for (ventaOption of ventasSharedCollection; track $index) {
+              <option [ngValue]="ventaOption">{{ ventaOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_sesion" jhiTranslate="backendApp.asientos.sesion">Sesion</label>
+          <select
+            class="form-control"
+            id="field_sesion"
+            data-cy="sesion"
+            name="sesion"
+            formControlName="sesion"
+            [compareWith]="compareSesion"
+          >
+            <option [ngValue]="null"></option>
+            @for (sesionOption of sesionsSharedCollection; track $index) {
+              <option [ngValue]="sesionOption">{{ sesionOption.id }}</option>
+            }
+          </select>
+        </div>
       </div>
 
       <div>
