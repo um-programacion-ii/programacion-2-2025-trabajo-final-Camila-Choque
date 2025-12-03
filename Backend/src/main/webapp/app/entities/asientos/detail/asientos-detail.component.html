@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (asientos(); as asientosRef) {
+      <div>
+        <h2 data-cy="asientosDetailsHeading"><span jhiTranslate="backendApp.asientos.detail.title">Asientos</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ asientosRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.asientos.fila">Fila</span></dt>
+          <dd>
+            <span>{{ asientosRef.fila }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.asientos.columna">Columna</span></dt>
+          <dd>
+            <span>{{ asientosRef.columna }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.asientos.persona">Persona</span></dt>
+          <dd>
+            <span>{{ asientosRef.persona }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.asientos.estado">Estado</span></dt>
+          <dd>
+            <span>{{ asientosRef.estado }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.asientos.venta">Venta</span></dt>
+          <dd>
+            @if (asientos()!.venta) {
+              <div>
+                <a [routerLink]="['/venta', asientos()!.venta?.id, 'view']">{{ asientosRef.venta?.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="backendApp.asientos.sesion">Sesion</span></dt>
+          <dd>
+            @if (asientos()!.sesion) {
+              <div>
+                <a [routerLink]="['/sesion', asientos()!.sesion?.id, 'view']">{{ asientosRef.sesion?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Volver</span>
+        </button>
+
+        <button type="button" [routerLink]="['/asientos', asientosRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

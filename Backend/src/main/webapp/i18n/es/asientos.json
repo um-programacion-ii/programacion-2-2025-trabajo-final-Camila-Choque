@@ -1,0 +1,29 @@
+{
+  "backendApp": {
+    "asientos": {
+      "home": {
+        "title": "Asientos",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Asientos",
+        "createOrEditLabel": "Crear o editar Asientos",
+        "notFound": "Ningún Asientos encontrado"
+      },
+      "created": "Un nuevo Asientos ha sido creado con el identificador {{ param }}",
+      "updated": "Un Asientos ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Asientos ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Asientos {{ id }}?"
+      },
+      "detail": {
+        "title": "Asientos"
+      },
+      "id": "ID",
+      "fila": "Fila",
+      "columna": "Columna",
+      "persona": "Persona",
+      "estado": "Estado",
+      "venta": "Venta",
+      "sesion": "Sesion"
+    }
+  }
+}

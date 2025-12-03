@@ -1,0 +1,175 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-evento-heading" data-cy="EventoCreateUpdateHeading" jhiTranslate="backendApp.evento.home.createOrEditLabel">
+        Crear o editar Evento
+      </h2>
+
+      <div>
+        <jhi-alert-error />
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="backendApp.evento.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_titulo" jhiTranslate="backendApp.evento.titulo">Titulo</label>
+          <input type="text" class="form-control" name="titulo" id="field_titulo" data-cy="titulo" formControlName="titulo" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_resumen" jhiTranslate="backendApp.evento.resumen">Resumen</label>
+          <input type="text" class="form-control" name="resumen" id="field_resumen" data-cy="resumen" formControlName="resumen" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_descripcion" jhiTranslate="backendApp.evento.descripcion">Descripcion</label>
+          <input
+            type="text"
+            class="form-control"
+            name="descripcion"
+            id="field_descripcion"
+            data-cy="descripcion"
+            formControlName="descripcion"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_fecha" jhiTranslate="backendApp.evento.fecha">Fecha</label>
+          <div class="input-group">
+            <input
+              id="field_fecha"
+              data-cy="fecha"
+              type="text"
+              class="form-control"
+              name="fecha"
+              ngbDatepicker
+              #fechaDp="ngbDatepicker"
+              formControlName="fecha"
+            />
+            <button type="button" class="btn btn-secondary" (click)="fechaDp.toggle()"><fa-icon icon="calendar-alt"></fa-icon></button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_direccion" jhiTranslate="backendApp.evento.direccion">Direccion</label>
+          <input type="text" class="form-control" name="direccion" id="field_direccion" data-cy="direccion" formControlName="direccion" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_imagen" jhiTranslate="backendApp.evento.imagen">Imagen</label>
+          <input type="text" class="form-control" name="imagen" id="field_imagen" data-cy="imagen" formControlName="imagen" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_filaAsientos" jhiTranslate="backendApp.evento.filaAsientos">Fila Asientos</label>
+          <input
+            type="number"
+            class="form-control"
+            name="filaAsientos"
+            id="field_filaAsientos"
+            data-cy="filaAsientos"
+            formControlName="filaAsientos"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_columnaAsientos" jhiTranslate="backendApp.evento.columnaAsientos">Columna Asientos</label>
+          <input
+            type="number"
+            class="form-control"
+            name="columnaAsientos"
+            id="field_columnaAsientos"
+            data-cy="columnaAsientos"
+            formControlName="columnaAsientos"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_precioEntrada" jhiTranslate="backendApp.evento.precioEntrada">Precio Entrada</label>
+          <input
+            type="number"
+            class="form-control"
+            name="precioEntrada"
+            id="field_precioEntrada"
+            data-cy="precioEntrada"
+            formControlName="precioEntrada"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_eventoTipoNombre" jhiTranslate="backendApp.evento.eventoTipoNombre"
+            >Evento Tipo Nombre</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="eventoTipoNombre"
+            id="field_eventoTipoNombre"
+            data-cy="eventoTipoNombre"
+            formControlName="eventoTipoNombre"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_eventoTipoDescripcion" jhiTranslate="backendApp.evento.eventoTipoDescripcion"
+            >Evento Tipo Descripcion</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="eventoTipoDescripcion"
+            id="field_eventoTipoDescripcion"
+            data-cy="eventoTipoDescripcion"
+            formControlName="eventoTipoDescripcion"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_estado" jhiTranslate="backendApp.evento.estado">Estado</label>
+          <input type="text" class="form-control" name="estado" id="field_estado" data-cy="estado" formControlName="estado" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_ultimaActualizacion" jhiTranslate="backendApp.evento.ultimaActualizacion"
+            >Ultima Actualizacion</label
+          >
+          <div class="input-group">
+            <input
+              id="field_ultimaActualizacion"
+              data-cy="ultimaActualizacion"
+              type="text"
+              class="form-control"
+              name="ultimaActualizacion"
+              ngbDatepicker
+              #ultimaActualizacionDp="ngbDatepicker"
+              formControlName="ultimaActualizacion"
+            />
+            <button type="button" class="btn btn-secondary" (click)="ultimaActualizacionDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancelar</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Guardar</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

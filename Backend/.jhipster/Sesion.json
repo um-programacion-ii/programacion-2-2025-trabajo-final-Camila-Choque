@@ -1,0 +1,44 @@
+{
+  "annotations": {
+    "changelogDate": "20251112215741"
+  },
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "token",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "estadoFlujo",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "eventoSeleccionado",
+      "fieldType": "Long"
+    },
+    {
+      "fieldName": "ultimaActividad",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "expiraEn",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": false,
+  "name": "Sesion",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityField": "id",
+      "otherEntityName": "asientos",
+      "otherEntityRelationshipName": "sesion",
+      "relationshipName": "asientos",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceImpl"
+}

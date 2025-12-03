@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (sesion(); as sesionRef) {
+      <div>
+        <h2 data-cy="sesionDetailsHeading"><span jhiTranslate="backendApp.sesion.detail.title">Sesion</span></h2>
+
+        <hr />
+
+        <jhi-alert-error />
+
+        <jhi-alert />
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ sesionRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.sesion.token">Token</span></dt>
+          <dd>
+            <span>{{ sesionRef.token }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.sesion.estadoFlujo">Estado Flujo</span></dt>
+          <dd>
+            <span>{{ sesionRef.estadoFlujo }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.sesion.eventoSeleccionado">Evento Seleccionado</span></dt>
+          <dd>
+            <span>{{ sesionRef.eventoSeleccionado }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.sesion.ultimaActividad">Ultima Actividad</span></dt>
+          <dd>
+            <span>{{ sesionRef.ultimaActividad | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="backendApp.sesion.expiraEn">Expira En</span></dt>
+          <dd>
+            <span>{{ sesionRef.expiraEn | formatMediumDate }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Volver</span>
+        </button>
+
+        <button type="button" [routerLink]="['/sesion', sesionRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Editar</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>
