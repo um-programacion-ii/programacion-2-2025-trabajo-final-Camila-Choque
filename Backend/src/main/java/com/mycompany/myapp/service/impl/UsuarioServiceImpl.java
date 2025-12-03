@@ -3,6 +3,7 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.domain.Usuario;
 import com.mycompany.myapp.repository.UsuarioRepository;
 import com.mycompany.myapp.service.UsuarioService;
+import com.mycompany.myapp.service.client.ProxyClient;
 import com.mycompany.myapp.service.dto.UsuarioDTO;
 import com.mycompany.myapp.service.mapper.UsuarioMapper;
 import java.util.LinkedList;
@@ -27,10 +28,12 @@ public class UsuarioServiceImpl implements UsuarioService {
 
     private final UsuarioMapper usuarioMapper;
 
-    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper) {
+    private final ProxyClient proxyClient;
+
+    public UsuarioServiceImpl(UsuarioRepository usuarioRepository, UsuarioMapper usuarioMapper , ProxyClient proxyClient) {
         this.usuarioRepository = usuarioRepository;
         this.usuarioMapper = usuarioMapper;
-    }
+        this.proxyClient = proxyClient;  }
 
     @Override
     public UsuarioDTO save(UsuarioDTO usuarioDTO) {
@@ -81,5 +84,9 @@ public class UsuarioServiceImpl implements UsuarioService {
     public void delete(Long id) {
         LOG.debug("Request to delete Usuario : {}", id);
         usuarioRepository.deleteById(id);
+    }
+
+    public String registrar (String body){
+        return proxyClient.registrar(body);
     }
 }
