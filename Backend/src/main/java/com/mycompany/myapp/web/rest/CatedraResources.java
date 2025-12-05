@@ -1,5 +1,6 @@
 package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.service.CatedraServices;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -7,7 +8,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 // Dieccion con la que el frontend se comunica con el back
-@RequestMapping("/catedra")
+@RequestMapping("/api/catedra")
+@PermitAll
 public class CatedraResources {
     private final CatedraServices catedraServices;
 
