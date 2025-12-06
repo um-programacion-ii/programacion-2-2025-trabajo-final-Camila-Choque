@@ -1,11 +1,8 @@
 package com.example.Proxy.resource;
-import com.example.Proxy.dto.RegistrarUsuarioDto;
-import com.example.Proxy.dto.RegistrarUsuarioResponse;
+import com.example.Proxy.dto.*;
 import com.example.Proxy.services.ProxyServices;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("/proxy")
@@ -19,5 +16,24 @@ public class ProxyResource {
     @PostMapping("/registrar")
     public RegistrarUsuarioResponse registrarUsuario(@RequestBody RegistrarUsuarioDto dto) {
         return proxyService.registarUsuario(dto);
+    }
+
+    @PostMapping("/login")
+    public String Login(@RequestBody LoginDto dto) {
+        return proxyService.login(dto);
+    }
+    @GetMapping("/eventos-resumidos")
+    public List<EventoResumidoDto> conseguirEventosResumidos() {
+        return proxyService.conseguirEventosResumidos();
+    }
+
+    @GetMapping("/eventos")
+    public List<EventoDto> conseguirEventos() {
+        return proxyService.conseguirEventos();
+    }
+
+    @GetMapping("/eventos/{id}")
+    public EventoDto conseguirEventosPorId(@PathVariable Long id) {
+        return proxyService.conseguirEventosPorId(id);
     }
 }
