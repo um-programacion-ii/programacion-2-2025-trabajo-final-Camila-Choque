@@ -2,14 +2,17 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.domain.Evento;
 import com.mycompany.myapp.repository.EventoRepository;
 import com.mycompany.myapp.service.CatedraServices;
+import com.mycompany.myapp.service.dto.EventoDTO;
+import com.mycompany.myapp.service.mapper.EventoMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.Map;
 // Congifuracion de Kafka realizada con IA
 @Service
-@Slf4j
 public class EventoSyncService {
 
     @Autowired
@@ -17,6 +20,12 @@ public class EventoSyncService {
 
     @Autowired
     private CatedraServices catedraApiService;
+
+    @Autowired
+    private EventoMapper eventoMapper;
+
+    private final Logger log = LoggerFactory.getLogger(EventoChangeListener.class);
+
 
     /**
      * Sincroniza un nuevo evento desde el servicio de la cátedra
@@ -34,7 +43,7 @@ public class EventoSyncService {
             }
 
             // Obtener datos completos del evento desde la cátedra
-            Evento evento = catedraApiService.obtenerEventoPorId(eventoId);
+            EventoDTO evento = catedraApiService.conseguirEventoPorId(eventoId.toString());
 
             if (evento == null) {
                 log.error(" No se pudo obtener el evento {} desde la cátedra", eventoId);
@@ -43,9 +52,8 @@ public class EventoSyncService {
 
             // Establecer estado inicial
             evento.setEstado("ACTIVO");
-
-            // Guardar en base de datos local
-            Evento eventoGuardado = eventoRepository.save(evento);
+            Evento new_evento = eventoMapper.toEntity(evento);
+            Evento eventoGuardado = eventoRepository.save(new_evento);
 
             log.info(" Evento {} sincronizado y guardado correctamente con ID: {}",
                 eventoId, eventoGuardado.getId());
@@ -68,6 +76,7 @@ public class EventoSyncService {
             Evento evento = eventoRepository.findById(eventoId)
                 .orElse(null);
 
+
             if (evento == null) {
                 log.warn(" El evento {} no existe localmente. Sincronizando...", eventoId);
                 sincronizarNuevoEvento(eventoId);
@@ -81,10 +90,11 @@ public class EventoSyncService {
             } else {
                 // Opción 2: Resincronizar todo el evento desde la cátedra
                 log.info(" Resincronizando evento completo desde la cátedra...");
-                Evento eventoActualizado = catedraApiService.obtenerEventoPorId(eventoId);
+                EventoDTO eventoActualizado = catedraApiService.conseguirEventoPorId(eventoId.toString());
 
+                EventoDTO new_evento = eventoMapper.toDto(evento);
                 if (eventoActualizado != null) {
-                    copiarDatosEvento(eventoActualizado, evento);
+                    copiarDatosEvento(eventoActualizado, new_evento);
                 }
             }
 
@@ -194,7 +204,7 @@ public class EventoSyncService {
     /**
      * Copia datos de un evento a otro
      */
-    private void copiarDatosEvento(Evento origen, Evento destino) {
+    private void copiarDatosEvento(EventoDTO origen, EventoDTO destino) {
         destino.setTitulo(origen.getTitulo());
         destino.setResumen(origen.getResumen());
         destino.setDescripcion(origen.getDescripcion());
@@ -202,7 +212,7 @@ public class EventoSyncService {
         destino.setDireccion(origen.getDireccion());
         destino.setImagen(origen.getImagen());
         destino.setFilaAsientos(origen.getFilaAsientos());
-        destino.setColumnAsientos(origen.getColumnAsientos());
+        destino.setColumnaAsientos(origen.getColumnaAsientos());
         destino.setPrecioEntrada(origen.getPrecioEntrada());
         // No copiar el estado, mantener el actual
         // Copiar otros campos según tu entidad

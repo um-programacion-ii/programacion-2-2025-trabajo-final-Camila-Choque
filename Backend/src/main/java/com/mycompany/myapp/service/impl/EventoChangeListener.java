@@ -2,12 +2,14 @@ package com.mycompany.myapp.service.impl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.service.dto.EventoChangeDTO;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.listener.MessageListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.connection.Message;
+import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 // Congifuracion de Kafka realizada con IA
 @Component
-@Slf4j
 public class EventoChangeListener implements MessageListener {
 
     @Autowired
@@ -15,6 +17,8 @@ public class EventoChangeListener implements MessageListener {
 
     @Autowired
     private ObjectMapper objectMapper;
+
+    private final Logger log = LoggerFactory.getLogger(EventoChangeListener.class);
 
     /**
      * Este método se ejecuta automáticamente cuando llega un mensaje de Redis
@@ -29,6 +33,7 @@ public class EventoChangeListener implements MessageListener {
             log.info(" [REDIS PUB/SUB] Mensaje recibido del canal '{}': {}", channel, messageBody);
 
             // Deserializar el JSON a objeto
+            log.info("JSON recibido: {}", messageBody);
             EventoChangeDTO cambio = objectMapper.readValue(messageBody, EventoChangeDTO.class);
 
             log.info("🔍 [REDIS PUB/SUB] Cambio parseado: eventoId={}, tipo={}",

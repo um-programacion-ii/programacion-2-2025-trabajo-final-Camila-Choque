@@ -21,6 +21,9 @@ logging:
     com.mycompany.myapp: DEBUG
 
 spring:
+  redis:
+    host: ${SPRING_REDIS_HOST:localhost}
+    port: ${SPRING_REDIS_PORT:6379}
   devtools:
     restart:
       enabled: true
@@ -117,3 +120,7 @@ jhipster:
 # ===================================================================
 
 # application:
+app:
+  redis:
+    channel:
+      eventos-cambios: "${APP_REDIS_CHANNEL_EVENTOS_CAMBIOS:eventos_cambios}"
