@@ -1,7 +1,10 @@
 package com.example.Proxy.config;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
@@ -12,15 +15,13 @@ import tools.jackson.databind.ObjectMapper;
 @Configuration
 public class RedisConfig {
 
-    // Redis LOCAL del alumno (para comunicación Proxy <-> Backend)
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory() {
-        LettuceConnectionFactory factory = new LettuceConnectionFactory();
-        factory.setHostName("localhost");
-        factory.setPort(6379);
-        factory.setDatabase(0); // Base de datos 0 para pub/sub
-        return factory;
-    }
+    @Value("${spring.redis.host}")
+    private String redisHost;
+
+    @Value("${spring.redis.port}")
+    private int redisPort;
+
+
 
     @Bean
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
@@ -37,4 +38,23 @@ public class RedisConfig {
         template.afterPropertiesSet();
         return template;
     }
+    @Bean
+    public JedisConnectionFactory redisConnectionFactory() {
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
+        config.setHostName(redisHost);
+        config.setPort(redisPort);
+        return new JedisConnectionFactory(config);
+    }
+    
+    /*
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        LettuceConnectionFactory factory = new LettuceConnectionFactory();
+        factory.setHostName("localhost");
+        factory.setPort(6379);
+        factory.setDatabase(0); // Base de datos 0 para pub/sub
+        return factory;
+    }
+    */
+
 }

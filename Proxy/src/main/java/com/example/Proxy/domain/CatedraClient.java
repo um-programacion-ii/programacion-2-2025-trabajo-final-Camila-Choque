@@ -15,7 +15,7 @@ public class CatedraClient {
     private final String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtLmNob3F1ZSIsImV4cCI6MTg1MTYyODI1NSwiYXV0aCI6IlJPTEVfVVNFUiIsImlhdCI6MTc2NTIyODI1NX0.xqLo0zDuS_eiT1dC9ilfWeN2EmqoLpNcX4ZN7kfARFDiRRCJqcUrhzANn9-zmK9HRkhAXwBX4PKyMA7l3JpvAA";
     public CatedraClient(WebClient webClient) {
         this.webClient = webClient;
-        // Log the WebClient's baseUrl when the client is constructed (if available)
+
         try {
             String base = webClient.mutate().build().toString();
             logger.info("CatedraClient constructed, WebClient.toString(): {}", base);

@@ -12,12 +12,11 @@ import java.util.Map;
 // Congifuracion de Kafka realizada con IA
 @Configuration
 public class KafkaConsumerConfig {
-
-    @Value("${kafka.bootstrap-servers}")
+    @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
-    @Value("${kafka.consumer.group-id}")
-    private String groupId; // Tu consumer group id único
+    @Value("${spring.kafka.consumer.group-id}")
+    private String groupId;
 
     @Bean
     public ConsumerFactory<String, String> consumerFactory() {

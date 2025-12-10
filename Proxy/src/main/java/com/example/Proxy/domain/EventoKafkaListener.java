@@ -19,7 +19,7 @@ public class EventoKafkaListener {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @KafkaListener(topics = "${kafka.topic.eventos}", groupId = "${kafka.consumer.group-id}")
+    @KafkaListener(topics = "${spring.kafka.topic.eventos}", groupId = "${spring.kafka.consumer.group-id}")
     public void consumirEventoActualizado(String mensaje) {
         try {
             log.info("Mensaje recibido de Kafka: {}", mensaje);

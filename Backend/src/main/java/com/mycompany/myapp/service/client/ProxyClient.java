@@ -36,7 +36,7 @@ public class ProxyClient {
     }
     public List<EventoResumidoDTO> conseguirEventosResumidos() {
         return proxyWebClient.get()
-                .uri("/proxy/eventos/resumidos")
+                .uri("/proxy/eventos-resumidos")
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
                 .bodyToFlux(EventoResumidoDTO.class)
