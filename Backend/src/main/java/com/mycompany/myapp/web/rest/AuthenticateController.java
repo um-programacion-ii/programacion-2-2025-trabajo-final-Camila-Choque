@@ -5,12 +5,18 @@ import static com.mycompany.myapp.security.SecurityUtils.JWT_ALGORITHM;
 import static com.mycompany.myapp.security.SecurityUtils.USER_ID_CLAIM;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.mycompany.myapp.domain.Sesion;
+import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.security.DomainUserDetailsService.UserWithId;
+import com.mycompany.myapp.service.UserService;
+import com.mycompany.myapp.service.impl.SesionServiceImpl;
 import com.mycompany.myapp.web.rest.vm.LoginVM;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,27 +52,38 @@ public class AuthenticateController {
     @Value("${jhipster.security.authentication.jwt.token-validity-in-seconds-for-remember-me:0}")
     private long tokenValidityInSecondsForRememberMe;
 
+    private final SesionServiceImpl sesionService;
+
+    private final UserService userService;
+
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
-    public AuthenticateController(JwtEncoder jwtEncoder, AuthenticationManagerBuilder authenticationManagerBuilder) {
+    public AuthenticateController(JwtEncoder jwtEncoder, AuthenticationManagerBuilder authenticationManagerBuilder,SesionServiceImpl sesionService,UserService userService) {
         this.jwtEncoder = jwtEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.sesionService = sesionService;
+        this.userService = userService;
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<JWTToken> authorize(@Valid @RequestBody LoginVM loginVM) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-            loginVM.getUsername(),
-            loginVM.getPassword()
-        );
+    public ResponseEntity<Map<String, Object>> authorize(@Valid @RequestBody LoginVM loginVM) {
+        UsernamePasswordAuthenticationToken authenticationToken =
+            new UsernamePasswordAuthenticationToken(loginVM.getUsername(), loginVM.getPassword());
 
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String jwt = this.createToken(authentication, loginVM.isRememberMe());
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setBearerAuth(jwt);
-        return new ResponseEntity<>(new JWTToken(jwt), httpHeaders, HttpStatus.OK);
+        User user = userService.getUserWithAuthoritiesByLogin(loginVM.getUsername()).orElseThrow();
+        Sesion sesion = sesionService.crearSesion(user.getId());
+        Map<String, Object> body = new HashMap<>();
+        body.put("jwt", jwt);
+        body.put("sessionToken", sesion.getToken());
+        body.put("sessionId", sesion.getId());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(jwt);
+        return new ResponseEntity<>(body, headers, HttpStatus.OK);
     }
+
 
     /**
      * {@code GET /authenticate} : check if the user is authenticated.

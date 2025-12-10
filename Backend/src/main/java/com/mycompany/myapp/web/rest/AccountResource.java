@@ -7,15 +7,18 @@ import com.mycompany.myapp.service.MailService;
 import com.mycompany.myapp.service.UserService;
 import com.mycompany.myapp.service.dto.AdminUserDTO;
 import com.mycompany.myapp.service.dto.PasswordChangeDTO;
+import com.mycompany.myapp.service.impl.SesionServiceImpl;
 import com.mycompany.myapp.web.rest.errors.*;
 import com.mycompany.myapp.web.rest.vm.KeyAndPasswordVM;
 import com.mycompany.myapp.web.rest.vm.ManagedUserVM;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -40,10 +43,13 @@ public class AccountResource {
 
     private final MailService mailService;
 
-    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService) {
+    private final SesionServiceImpl sesionService;
+    public AccountResource(UserRepository userRepository, UserService userService, MailService mailService,SesionServiceImpl sesionService) {
         this.userRepository = userRepository;
         this.userService = userService;
         this.mailService = mailService;
+        this.sesionService = sesionService;
+
     }
 
     /**
@@ -177,4 +183,11 @@ public class AccountResource {
             password.length() > ManagedUserVM.PASSWORD_MAX_LENGTH
         );
     }
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpServletRequest request) {
+        String token = request.getHeader("X-Session-Token");
+        sesionService.logout(token);
+        return ResponseEntity.ok().build();
+    }
+
 }
