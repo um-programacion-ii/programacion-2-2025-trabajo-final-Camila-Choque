@@ -3,8 +3,11 @@ package com.mycompany.myapp.config;
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 
+import com.mycompany.myapp.filtro.SessionFilter;
 import com.mycompany.myapp.security.*;
+import com.mycompany.myapp.service.impl.SesionRedisManager;
 import com.mycompany.myapp.web.filter.SpaWebFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -19,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.server.resource.web.BearerTokenAuthenticationEntryPoint;
 import org.springframework.security.oauth2.server.resource.web.access.BearerTokenAccessDeniedHandler;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter;
 import org.springframework.security.web.servlet.util.matcher.MvcRequestMatcher;
@@ -34,9 +38,16 @@ public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
 
-    public SecurityConfiguration(Environment env, JHipsterProperties jHipsterProperties) {
+    private final SesionRedisManager sesionRedisManager;
+
+    @Autowired
+    private SessionFilter sessionFilter;
+
+    public SecurityConfiguration(Environment env, JHipsterProperties jHipsterProperties,SessionFilter sessionFilter, SesionRedisManager sesionRedisManager) {
         this.env = env;
         this.jHipsterProperties = jHipsterProperties;
+        this.sessionFilter = sessionFilter;
+        this.sesionRedisManager = sesionRedisManager;
     }
 
     @Bean
@@ -45,11 +56,12 @@ public class SecurityConfiguration {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, MvcRequestMatcher.Builder mvc, SesionRedisManager sesionRedisManager) throws Exception {
         http
             .cors(withDefaults())
             .csrf(csrf -> csrf.disable())
             .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
+            .addFilterBefore(new SessionFilter(sesionRedisManager), UsernamePasswordAuthenticationFilter.class)
             .headers(headers ->
                 headers
                     .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))

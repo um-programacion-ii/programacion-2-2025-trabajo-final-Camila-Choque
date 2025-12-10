@@ -3,14 +3,19 @@ package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.domain.Sesion;
 import com.mycompany.myapp.repository.SesionRepository;
 import com.mycompany.myapp.service.SesionService;
+import com.mycompany.myapp.service.dto.SesionCacheDTO;
 import com.mycompany.myapp.service.dto.SesionDTO;
 import com.mycompany.myapp.service.mapper.SesionMapper;
+
+import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,10 +31,14 @@ public class SesionServiceImpl implements SesionService {
     private final SesionRepository sesionRepository;
 
     private final SesionMapper sesionMapper;
+    @Autowired
+    private SesionRedisManager sesionRedisManager;
 
-    public SesionServiceImpl(SesionRepository sesionRepository, SesionMapper sesionMapper) {
+
+    public SesionServiceImpl(SesionRepository sesionRepository, SesionMapper sesionMapper, SesionRedisManager sesionRedisManager) {
         this.sesionRepository = sesionRepository;
         this.sesionMapper = sesionMapper;
+        this.sesionRedisManager = sesionRedisManager;
     }
 
     @Override
@@ -81,5 +90,43 @@ public class SesionServiceImpl implements SesionService {
     public void delete(Long id) {
         LOG.debug("Request to delete Sesion : {}", id);
         sesionRepository.deleteById(id);
+    }
+    public Sesion crearSesion(Long usuarioId) {
+        Sesion sesion = new Sesion();
+        sesion.setToken(UUID.randomUUID().toString());
+        sesion.setEstadoFlujo("INICIO");
+        sesion.setUltimaActividad(LocalDate.now());
+        sesion.setExpiraEn(LocalDate.now().plusDays(1)); // ejemplo
+        sesionRepository.save(sesion);
+
+        SesionCacheDTO cache = new SesionCacheDTO(
+            sesion.getToken(),
+            sesion.getId(),
+            usuarioId
+        );
+
+        sesionRedisManager.guardarEnCache(cache);
+
+        return sesion;
+    }
+
+    public Sesion renovarActividad(String token) {
+        SesionCacheDTO dto = sesionRedisManager.obtenerDeCache(token);
+        if (dto == null) return null;
+
+        Sesion sesion = sesionRepository.findById(dto.getSesionId()).orElse(null);
+        if (sesion == null) return null;
+
+        sesion.setUltimaActividad(LocalDate.now());
+        sesionRepository.save(sesion);
+
+        return sesion;
+    }
+
+    public void logout(String token) {
+        SesionCacheDTO dto = sesionRedisManager.obtenerDeCache(token);
+        if (dto != null) {
+            sesionRedisManager.borrar(token);
+        }
     }
 }
