@@ -1,19 +1,15 @@
-package com.example.Proxy.dto;
+package com.mycompany.myapp.service.dto;
+import lombok.Data;
+import java.io.Serializable;
 import java.time.LocalDate;
-
-public class EventoDto {
+@Data
+public class EventoResumidoDTO implements Serializable {
     private Long id;
     private String titulo;
     private String resumen;
     private String descripcion;
     private LocalDate fecha;
-    private String direccion;
-    private String imagen;
-    private Integer filaAsientos;
-    private Integer columnaAsientos;
     private Double precioEntrada;
     private String eventoTipoNombre;
     private String eventoTipoDescripcion;
-    private IntegrantedDto integrantes;
-
 }
