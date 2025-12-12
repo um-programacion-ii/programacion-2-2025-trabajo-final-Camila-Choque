@@ -22,9 +22,14 @@ public class SesionRedisManager {
     }
 
     public SesionCacheDTO obtenerDeCache(String token) {
-        SesionCacheDTO dto = (SesionCacheDTO) redisTemplate.opsForValue().get(key(token));
+        String redisKey = key(token);
+        Long ttl = redisTemplate.getExpire(redisKey, TimeUnit.SECONDS);
+        if (ttl == null || ttl <= 0) {
+            return null;
+        }
+        SesionCacheDTO dto = (SesionCacheDTO) redisTemplate.opsForValue().get(redisKey);
         if (dto != null) {
-            redisTemplate.expire(key(token), TTL_SECONDS, TimeUnit.SECONDS);
+            redisTemplate.expire(redisKey, TTL_SECONDS, TimeUnit.SECONDS);
         }
         return dto;
     }
