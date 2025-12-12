@@ -12,7 +12,7 @@ public class CatedraClient {
 
     private final WebClient webClient;
     private static final Logger logger = LoggerFactory.getLogger(CatedraClient.class);
-    private final String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtLmNob3F1ZSIsImV4cCI6MTg1MTYyODI1NSwiYXV0aCI6IlJPTEVfVVNFUiIsImlhdCI6MTc2NTIyODI1NX0.xqLo0zDuS_eiT1dC9ilfWeN2EmqoLpNcX4ZN7kfARFDiRRCJqcUrhzANn9-zmK9HRkhAXwBX4PKyMA7l3JpvAA";
+    private final String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtLmNob3F1ZSIsImV4cCI6MTc2Nzk5OTYyMCwiYXV0aCI6IlJPTEVfVVNFUiIsImlhdCI6MTc2NTQwNzYyMH0.5gWtqudeKhTKJbjFKc1fRJdLm3hZl58Y2WcaHjhBVMPOlxhPsRUeUnCmdt2LYSpcEzep9b42uB5WgTga3aqc8Q";
     public CatedraClient(WebClient webClient) {
         this.webClient = webClient;
 
@@ -56,6 +56,8 @@ public class CatedraClient {
 
     public List<EventoDto> conseguirEventos() {
         logger.info("Invocando endpoint GET /eventos usando WebClient");
+        logger.info("Llamando a: {}/eventos", webClient.toString());
+
         return webClient.get()
                 .uri("/endpoints/v1/eventos")
                 .header("Authorization", "Bearer " + token)
@@ -67,10 +69,26 @@ public class CatedraClient {
     public EventoDto conseguirEventosPorId(Long id) {
         logger.info("Invocando endpoint GET /eventos/{id} usando WebClient");
         return webClient.get()
-                .uri("/endpoints/v1/eventos/{id}", id)
+                .uri("/endpoints/v1/evento/{id}", id)
                 .header("Authorization", "Bearer " + token)
                 .retrieve()
                 .bodyToMono(EventoDto.class)
                 .block();
     }
+    /*
+    public String conseguirEventos() {
+        logger.info("Invocando endpoint GET /eventos (raw) usando WebClient");
+        String body = webClient.get()
+                .uri("/endpoints/v1/eventos")
+                .header("Authorization", "Bearer " + token)
+                .retrieve()
+                .bodyToMono(String.class)
+                .block();
+
+        logger.info("RAW response body: {}", body);
+        return body;
+    }
+    */
+
+
 }

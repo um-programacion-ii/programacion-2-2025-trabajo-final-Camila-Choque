@@ -7,9 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class IntegrantedDto {
-    private String nombre;
-    private String apellido;
-    private String identificacion;
+public class EventoTipoDTO {
+    private String eventoTipoNombre;
+    private String eventoTipoDescripcion;
+
+
 
 }

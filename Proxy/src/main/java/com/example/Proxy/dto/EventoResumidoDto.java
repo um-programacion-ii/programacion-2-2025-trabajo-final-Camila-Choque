@@ -11,4 +11,6 @@ public class EventoResumidoDto {
     private String eventoTipoNombre;
     private String eventoTipoDescripcion;
 
+
+
 }

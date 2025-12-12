@@ -13,13 +13,14 @@ import java.io.IOException;
 @Component
 public class SessionFilter extends OncePerRequestFilter {
 
-    @Autowired
-    private SesionServiceImpl sesionServiceImpl;
+
+    private final SesionServiceImpl sesionServiceImpl;
 
     private final SesionRedisManager sesionRedisManager;
 
 
-    public SessionFilter(SesionRedisManager sesionRedisManager) {
+    public SessionFilter(SesionServiceImpl sesionServiceImpl, SesionRedisManager sesionRedisManager) {
+        this.sesionServiceImpl = sesionServiceImpl;
         this.sesionRedisManager = sesionRedisManager;
     }
     @Override

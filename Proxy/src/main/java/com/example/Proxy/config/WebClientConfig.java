@@ -15,10 +15,19 @@ public class WebClientConfig {
     private static final Logger logger = LoggerFactory.getLogger(WebClientConfig.class);
 
     @Bean
-    public WebClient WebClient() {
-        logger.info("proxy-target.base-url={}", baseUrl);
-        return WebClient.builder()
-                .baseUrl(baseUrl)
+    public WebClient webClient( @Value("${proxy-target.base-url}") String base) {
+        return WebClient.builder().baseUrl(base.replaceAll("/$", ""))
+                .filter((request, next) -> {
+                    logger.info("WebClient REQUEST -> {} {}", request.method(), request.url());
+                    request.headers().forEach((k,v) -> logger.info("REQ header: {}={}", k, v));
+                    return next.exchange(request)
+                            .doOnNext(resp -> {
+                                logger.info("WebClient RESPONSE status: {}", resp.statusCode());
+                                resp.headers().asHttpHeaders().forEach((k,v) -> logger.info("RESP header: {}={}", k, v));
+                            });
+                })
                 .build();
     }
+
+
 }

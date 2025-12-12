@@ -38,16 +38,15 @@ public class SecurityConfiguration {
 
     private final JHipsterProperties jHipsterProperties;
 
-    private final SesionRedisManager sesionRedisManager;
 
-    @Autowired
-    private SessionFilter sessionFilter;
+
+    private final SessionFilter sessionFilter;
 
     public SecurityConfiguration(Environment env, JHipsterProperties jHipsterProperties,SessionFilter sessionFilter, SesionRedisManager sesionRedisManager) {
         this.env = env;
         this.jHipsterProperties = jHipsterProperties;
         this.sessionFilter = sessionFilter;
-        this.sesionRedisManager = sesionRedisManager;
+
     }
 
     @Bean
@@ -61,7 +60,7 @@ public class SecurityConfiguration {
             .cors(withDefaults())
             .csrf(csrf -> csrf.disable())
             .addFilterAfter(new SpaWebFilter(), BasicAuthenticationFilter.class)
-            .addFilterBefore(new SessionFilter(sesionRedisManager), UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(sessionFilter, UsernamePasswordAuthenticationFilter.class)
             .headers(headers ->
                 headers
                     .contentSecurityPolicy(csp -> csp.policyDirectives(jHipsterProperties.getSecurity().getContentSecurityPolicy()))
