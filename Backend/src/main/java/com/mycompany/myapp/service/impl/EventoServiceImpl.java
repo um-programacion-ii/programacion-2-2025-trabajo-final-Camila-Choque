@@ -5,6 +5,9 @@ import com.mycompany.myapp.repository.EventoRepository;
 import com.mycompany.myapp.service.EventoService;
 import com.mycompany.myapp.service.dto.EventoDTO;
 import com.mycompany.myapp.service.mapper.EventoMapper;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +39,7 @@ public class EventoServiceImpl implements EventoService {
     public EventoDTO save(EventoDTO eventoDTO) {
         LOG.debug("Request to save Evento : {}", eventoDTO);
         Evento evento = eventoMapper.toEntity(eventoDTO);
+        evento.ultimaActualizacion(LocalDate.now());
         evento = eventoRepository.save(evento);
         return eventoMapper.toDto(evento);
     }

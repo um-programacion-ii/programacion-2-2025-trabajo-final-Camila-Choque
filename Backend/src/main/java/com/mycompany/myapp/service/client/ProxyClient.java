@@ -1,4 +1,5 @@
 package com.mycompany.myapp.service.client;
+import com.mycompany.myapp.service.dto.BloquearAsientosDTO;
 import com.mycompany.myapp.service.dto.EventoDTO;
 import com.mycompany.myapp.service.dto.EventoResumidoDTO;
 import org.springframework.http.MediaType;
@@ -52,6 +53,16 @@ public class ProxyClient {
                 .retrieve()
                 .bodyToFlux(EventoDTO.class)
                 .collectList()
+                .block();
+    }
+    public BloquearAsientosDTO bloquearAsientos( BloquearAsientosDTO dto) {
+        return proxyWebClient.post()
+                .uri("/proxy/bloquear-asientos")
+                .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
+                .bodyValue(dto)
+                .retrieve()
+                .bodyToMono(BloquearAsientosDTO.class)
                 .block();
     }
 }

@@ -1,5 +1,6 @@
 package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.service.CatedraServices;
+import com.mycompany.myapp.service.dto.BloquearAsientosDTO;
 import com.mycompany.myapp.service.dto.EventoDTO;
 import com.mycompany.myapp.service.dto.EventoResumidoDTO;
 import jakarta.annotation.security.PermitAll;
@@ -36,4 +37,8 @@ public class CatedraResources {
         return catedraServices.conseguirEventosResumidos();
     }
 
+    @PostMapping("/bloqueo-asientos")
+    public BloquearAsientosDTO bloquearAsientos (@RequestBody BloquearAsientosDTO body) {
+        return catedraServices.bloquearAsientos(body);
+    }
 }
