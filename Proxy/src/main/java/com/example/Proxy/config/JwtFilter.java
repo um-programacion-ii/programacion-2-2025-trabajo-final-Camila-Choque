@@ -3,10 +3,13 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
+
 
     private final JwtUtils jwtUtils;
 
@@ -21,6 +24,7 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String header = request.getHeader("Authorization");
+        log.debug("Authorization header: {}", header);
 
         if (header != null && header.startsWith("Bearer ")) {
             String token = header.substring(7);
@@ -28,7 +32,7 @@ public class JwtFilter extends OncePerRequestFilter {
             try {
                 var claims = jwtUtils.validateToken(token);
 
-                // podés guardar el user en el SecurityContext si querés
+
                 String username = claims.getBody().getSubject();
 
                 request.setAttribute("user", username);
@@ -44,4 +48,15 @@ public class JwtFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
+
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+
+        return path.startsWith("/api/auth")
+                || path.startsWith("/management")
+                || path.startsWith("/actuator")
+                || path.startsWith("/h2-console");
+    }
+
 }

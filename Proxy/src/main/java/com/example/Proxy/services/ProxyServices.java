@@ -32,4 +32,7 @@ public class ProxyServices {
         return catedraClient.conseguirEventosPorId(id);
     }
 
+    public BloquearAsientosDTO bloquearAsientos(BloquearAsientosRequest dto) {
+        return catedraClient.bloquearAsientos(dto);
+    }
 }

@@ -75,6 +75,18 @@ public class CatedraClient {
                 .bodyToMono(EventoDto.class)
                 .block();
     }
+    public BloquearAsientosDTO bloquearAsientos (BloquearAsientosRequest request){
+        logger.info("Invocando endpoint POST /bloquear-asientos usando WebClient");
+        return webClient.post()
+                .uri("/endpoints/v1/bloquear-asientos")
+                .header("Authorization", "Bearer " + token)
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(BloquearAsientosDTO.class)
+                .block();
+    }
+
+
     /*
     public String conseguirEventos() {
         logger.info("Invocando endpoint GET /eventos (raw) usando WebClient");

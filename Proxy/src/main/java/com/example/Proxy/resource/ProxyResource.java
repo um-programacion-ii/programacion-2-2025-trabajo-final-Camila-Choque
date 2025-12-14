@@ -36,4 +36,9 @@ public class ProxyResource {
     public EventoDto conseguirEventosPorId(@PathVariable Long id) {
         return proxyService.conseguirEventosPorId(id);
     }
+
+    @PostMapping("/bloquear-asientos")
+    public BloquearAsientosDTO bloquearAsientos(@RequestBody BloquearAsientosRequest dto) {
+        return proxyService.bloquearAsientos(dto);
+    }
 }
