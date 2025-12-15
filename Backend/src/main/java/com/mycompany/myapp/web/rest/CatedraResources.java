@@ -1,11 +1,14 @@
 package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.service.CatedraServices;
+import com.mycompany.myapp.service.dto.AsientosRedisDTO;
 import com.mycompany.myapp.service.dto.BloquearAsientosDTO;
 import com.mycompany.myapp.service.dto.EventoDTO;
 import com.mycompany.myapp.service.dto.EventoResumidoDTO;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @RestController
 // Dieccion con la que el frontend se comunica con el back
@@ -32,6 +35,7 @@ public class CatedraResources {
     public List<EventoDTO> conseguirEventos() {
         return catedraServices.conseguirEventos();
     }
+
     @GetMapping("/eventos-resumidos")
     public List<EventoResumidoDTO> conseguirEventosResumidos() {
         return catedraServices.conseguirEventosResumidos();
@@ -40,5 +44,37 @@ public class CatedraResources {
     @PostMapping("/bloqueo-asientos")
     public BloquearAsientosDTO bloquearAsientos (@RequestBody BloquearAsientosDTO body) {
         return catedraServices.bloquearAsientos(body);
+    }
+    @GetMapping("/asientos/evento/{eventoId}")
+    public AsientosRedisDTO getAsientosEvento(@PathVariable Long eventoId) {
+        return catedraServices.getAsientos(eventoId);
+    }
+
+    @GetMapping("/asientos/evento/{eventoId}/no-disponibles")
+    public List<String> getAsientosNoDisponibles(@PathVariable Long eventoId) {
+        return catedraServices.getAsientosNoDisponibles(eventoId);
+    }
+    @GetMapping("/asientos/evento/{eventoId}/vendidos")
+    public List<AsientosRedisDTO> getAsientosVendidos(@PathVariable Long eventoId) {
+        return catedraServices.getAsientosVendidos(eventoId);
+    }
+    @GetMapping("/asientos/evento/{eventoId}/bloqueados")
+    public List<AsientosRedisDTO> getAsientosBloqueados(@PathVariable Long eventoId) {
+        return catedraServices.getAsientosBloqueados(eventoId);
+    }
+
+    @GetMapping("/estadisticas/evento/{eventoId}")
+    public Map<String, Object> getEstadisticasEvento(@PathVariable Long eventoId) {
+        return catedraServices.getEstadisticasEvento(eventoId);
+    }
+
+    @GetMapping("/debug/keys")
+    public Set<String> getAllKeys() {
+        return catedraServices.getAllKeys();
+    }
+
+    @GetMapping("/debug/all")
+    public Map<String, String> getAllKeysWithValues() {
+        return catedraServices.getAllKeysWithValues();
     }
 }

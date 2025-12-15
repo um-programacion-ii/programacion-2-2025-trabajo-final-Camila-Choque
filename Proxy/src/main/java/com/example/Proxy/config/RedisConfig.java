@@ -2,6 +2,7 @@ package com.example.Proxy.config;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
@@ -22,8 +23,19 @@ public class RedisConfig {
     private int redisPort;
 
 
+    @Bean
+    public RedisConnectionFactory redisConnectionFactory() {
+        // Opción 1: Usando RedisStandaloneConfiguration (Recomendado)
+        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
+        config.setHostName(redisHost); // Usa la variable, no "localhost"
+        config.setPort(redisPort);
+        config.setDatabase(0);
+
+        return new LettuceConnectionFactory(config);
+    }
 
     @Bean
+    @Primary
     public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
@@ -38,12 +50,19 @@ public class RedisConfig {
         template.afterPropertiesSet();
         return template;
     }
-    @Bean
-    public JedisConnectionFactory redisConnectionFactory() {
-        RedisStandaloneConfiguration config = new RedisStandaloneConfiguration();
-        config.setHostName(redisHost);
-        config.setPort(redisPort);
-        return new JedisConnectionFactory(config);
+
+    @Bean(name = "redisTemplateString")
+    public RedisTemplate<String, String> stringRedisTemplate() {
+        RedisTemplate<String, String> template = new RedisTemplate<>();
+        template.setConnectionFactory(redisConnectionFactory());
+
+        template.setKeySerializer(new StringRedisSerializer());
+        template.setValueSerializer(new StringRedisSerializer());
+        template.setHashKeySerializer(new StringRedisSerializer());
+        template.setHashValueSerializer(new StringRedisSerializer());
+
+        template.afterPropertiesSet();
+        return template;
     }
     
     /*
