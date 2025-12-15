@@ -1,10 +1,13 @@
 package com.mycompany.myapp.service;
 import com.mycompany.myapp.service.client.ProxyClient;
+import com.mycompany.myapp.service.dto.AsientosRedisDTO;
 import com.mycompany.myapp.service.dto.BloquearAsientosDTO;
 import com.mycompany.myapp.service.dto.EventoDTO;
 import com.mycompany.myapp.service.dto.EventoResumidoDTO;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class CatedraServices {
@@ -28,4 +31,32 @@ public class CatedraServices {
     public BloquearAsientosDTO bloquearAsientos(BloquearAsientosDTO dto) {
         return proxyClient.bloquearAsientos(dto);
     }
+    public AsientosRedisDTO getAsientos(Long eventoId) {
+        return proxyClient.getAsientosEvento(eventoId);
+    }
+
+    public List<String> getAsientosNoDisponibles(Long eventoId) {
+        return proxyClient.getAsientosNoDisponibles(eventoId);
+    }
+
+    public List<AsientosRedisDTO> getAsientosVendidos(Long eventoId) {
+        return proxyClient.getAsientosVendidos(eventoId);
+    }
+
+    public List<AsientosRedisDTO> getAsientosBloqueados(Long eventoId) {
+        return proxyClient.getAsientosBloqueados(eventoId);
+    }
+
+    public Map<String, Object> getEstadisticasEvento(Long eventoId) {
+        return proxyClient.getEstadisticasEvento(eventoId);
+    }
+
+    public Set<String> getAllKeys() {
+        return proxyClient.getAllKeys();
+    }
+
+    public Map<String, String> getAllKeysWithValues() {
+        return proxyClient.getAllKeysWithValues();
+    }
 }
+
