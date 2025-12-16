@@ -1,9 +1,7 @@
 package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.service.CatedraServices;
-import com.mycompany.myapp.service.dto.AsientosRedisDTO;
-import com.mycompany.myapp.service.dto.BloquearAsientosDTO;
-import com.mycompany.myapp.service.dto.EventoDTO;
-import com.mycompany.myapp.service.dto.EventoResumidoDTO;
+import com.mycompany.myapp.service.dto.*;
+import com.mycompany.myapp.service.impl.AsientosDisponiblesService;
 import jakarta.annotation.security.PermitAll;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -17,8 +15,12 @@ import java.util.Set;
 public class CatedraResources {
     private final CatedraServices catedraServices;
 
-    public CatedraResources(CatedraServices catedraServices) {
+    private final AsientosDisponiblesService disponibilidadAsientosService;
+
+    public CatedraResources(CatedraServices catedraServices, AsientosDisponiblesService disponibilidadAsientosService) {
         this.catedraServices = catedraServices;
+
+        this.disponibilidadAsientosService = disponibilidadAsientosService;
     }
 
     //Si nos queremos registrar hay que hacer un post a /catedra/registrar
@@ -77,4 +79,10 @@ public class CatedraResources {
     public Map<String, String> getAllKeysWithValues() {
         return catedraServices.getAllKeysWithValues();
     }
+
+    @GetMapping("/asientos/evento/{eventoId}/disponibles")
+    public List<AsientosDisponiblesDTO> getAsientosDisponibles(@PathVariable Long eventoId) {
+        return disponibilidadAsientosService.obtenerAsientosDisponibles(eventoId);
+    }
+
 }

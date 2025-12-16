@@ -15,7 +15,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,9 +30,7 @@ public class SesionServiceImpl implements SesionService {
     private final SesionRepository sesionRepository;
 
     private final SesionMapper sesionMapper;
-    @Autowired
-    private SesionRedisManager sesionRedisManager;
-
+    private final SesionRedisManager sesionRedisManager;
 
     public SesionServiceImpl(SesionRepository sesionRepository, SesionMapper sesionMapper, SesionRedisManager sesionRedisManager) {
         this.sesionRepository = sesionRepository;
@@ -91,6 +88,7 @@ public class SesionServiceImpl implements SesionService {
         LOG.debug("Request to delete Sesion : {}", id);
         sesionRepository.deleteById(id);
     }
+
     public Sesion crearSesion(Long usuarioId) {
         Sesion sesion = new Sesion();
         sesion.setToken(UUID.randomUUID().toString());

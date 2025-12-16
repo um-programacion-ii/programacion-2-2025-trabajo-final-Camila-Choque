@@ -4,6 +4,8 @@ import { FormBuilder } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subject, from, of } from 'rxjs';
 
+import { IEvento } from 'app/entities/evento/evento.model';
+import { EventoService } from 'app/entities/evento/service/evento.service';
 import { IVenta } from 'app/entities/venta/venta.model';
 import { VentaService } from 'app/entities/venta/service/venta.service';
 import { ISesion } from 'app/entities/sesion/sesion.model';
@@ -20,6 +22,7 @@ describe('Asientos Management Update Component', () => {
   let activatedRoute: ActivatedRoute;
   let asientosFormService: AsientosFormService;
   let asientosService: AsientosService;
+  let eventoService: EventoService;
   let ventaService: VentaService;
   let sesionService: SesionService;
 
@@ -44,6 +47,7 @@ describe('Asientos Management Update Component', () => {
     activatedRoute = TestBed.inject(ActivatedRoute);
     asientosFormService = TestBed.inject(AsientosFormService);
     asientosService = TestBed.inject(AsientosService);
+    eventoService = TestBed.inject(EventoService);
     ventaService = TestBed.inject(VentaService);
     sesionService = TestBed.inject(SesionService);
 
@@ -51,6 +55,28 @@ describe('Asientos Management Update Component', () => {
   });
 
   describe('ngOnInit', () => {
+    it('should call Evento query and add missing value', () => {
+      const asientos: IAsientos = { id: 12575 };
+      const evento: IEvento = { id: 11280 };
+      asientos.evento = evento;
+
+      const eventoCollection: IEvento[] = [{ id: 11280 }];
+      jest.spyOn(eventoService, 'query').mockReturnValue(of(new HttpResponse({ body: eventoCollection })));
+      const additionalEventos = [evento];
+      const expectedCollection: IEvento[] = [...additionalEventos, ...eventoCollection];
+      jest.spyOn(eventoService, 'addEventoToCollectionIfMissing').mockReturnValue(expectedCollection);
+
+      activatedRoute.data = of({ asientos });
+      comp.ngOnInit();
+
+      expect(eventoService.query).toHaveBeenCalled();
+      expect(eventoService.addEventoToCollectionIfMissing).toHaveBeenCalledWith(
+        eventoCollection,
+        ...additionalEventos.map(expect.objectContaining),
+      );
+      expect(comp.eventosSharedCollection).toEqual(expectedCollection);
+    });
+
     it('should call Venta query and add missing value', () => {
       const asientos: IAsientos = { id: 12575 };
       const venta: IVenta = { id: 10395 };
@@ -97,6 +123,8 @@ describe('Asientos Management Update Component', () => {
 
     it('should update editForm', () => {
       const asientos: IAsientos = { id: 12575 };
+      const evento: IEvento = { id: 11280 };
+      asientos.evento = evento;
       const venta: IVenta = { id: 10395 };
       asientos.venta = venta;
       const sesion: ISesion = { id: 6272 };
@@ -105,6 +133,7 @@ describe('Asientos Management Update Component', () => {
       activatedRoute.data = of({ asientos });
       comp.ngOnInit();
 
+      expect(comp.eventosSharedCollection).toContainEqual(evento);
       expect(comp.ventasSharedCollection).toContainEqual(venta);
       expect(comp.sesionsSharedCollection).toContainEqual(sesion);
       expect(comp.asientos).toEqual(asientos);
@@ -180,6 +209,16 @@ describe('Asientos Management Update Component', () => {
   });
 
   describe('Compare relationships', () => {
+    describe('compareEvento', () => {
+      it('should forward to eventoService', () => {
+        const entity = { id: 11280 };
+        const entity2 = { id: 12252 };
+        jest.spyOn(eventoService, 'compareEvento');
+        comp.compareEvento(entity, entity2);
+        expect(eventoService.compareEvento).toHaveBeenCalledWith(entity, entity2);
+      });
+    });
+
     describe('compareVenta', () => {
       it('should forward to ventaService', () => {
         const entity = { id: 10395 };

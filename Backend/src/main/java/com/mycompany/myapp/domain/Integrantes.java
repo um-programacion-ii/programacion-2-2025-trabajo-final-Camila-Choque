@@ -30,7 +30,7 @@ public class Integrantes implements Serializable {
     private String identificacion;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnoreProperties(value = { "integrantes" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "integrantes", "asientos" }, allowSetters = true)
     private Evento evento;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

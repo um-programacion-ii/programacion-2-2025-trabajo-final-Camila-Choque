@@ -62,6 +62,7 @@ public class AsientosAsserts {
     public static void assertAsientosUpdatableRelationshipsEquals(Asientos expected, Asientos actual) {
         assertThat(actual)
             .as("Verify Asientos relationships")
+            .satisfies(a -> assertThat(a.getEvento()).as("check evento").isEqualTo(expected.getEvento()))
             .satisfies(a -> assertThat(a.getVenta()).as("check venta").isEqualTo(expected.getVenta()))
             .satisfies(a -> assertThat(a.getSesion()).as("check sesion").isEqualTo(expected.getSesion()));
     }

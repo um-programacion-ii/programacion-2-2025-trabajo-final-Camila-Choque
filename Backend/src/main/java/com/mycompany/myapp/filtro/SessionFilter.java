@@ -5,7 +5,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
@@ -23,10 +22,21 @@ public class SessionFilter extends OncePerRequestFilter {
         this.sesionServiceImpl = sesionServiceImpl;
         this.sesionRedisManager = sesionRedisManager;
     }
+
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {
-        return request.getRequestURI().equals("/api/authenticate");
+        String path = request.getServletPath();
+
+        return path.startsWith("/api/authenticate")
+            || path.startsWith("/api/internal/")
+            || path.startsWith("/h2-console")
+            || path.startsWith("/actuator/")
+            || path.startsWith("/swagger")
+            || path.startsWith("/v3/api-docs")
+            || path.startsWith("/error");
     }
+
+
 
     @Override
     protected void doFilterInternal(

@@ -4,22 +4,26 @@ server:
 proxy-target:
   base-url: "http://192.168.194.250:8080/api"
 
-spring:
-  kafka:
-    bootstrap-servers: localhost:9092
-    consumer:
-      group-id: choque
-      auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
-    topic:
-      eventos: eventos
+kafka:
+  bootstrap-servers: 192.168.194.250:9092
+  consumer:
+    group-id: choque
+  topic:
+    eventos: eventos-actualizacion
+  auto-offset-reset: earliest
+  key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+  value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
 
+spring:
   redis:
     host: 192.168.194.250
     port: 6379
     password: ""
     timeout: 60000
+    database: 0
 app:
   jwt:
     base64-secret: NzdiYWQ4OTIyYjEzMDUyYzhiNmVhNDk4MzViNzdkYjBiZjEwMmJjZDI2ZGNlNWYxY2JiOTI4YjEyYjJjNjcyYzEzOWFmYTRiNjc3MzA5OWUxMDUxY2FiZjBmNmI1ODgzZjFlZWU4N2Y5MTI4NzMzMmEyN2QzYmU4OTQ0NTJjNDU=
+    expiration: 86400000
+backend:
+  url: http://localhost:8081

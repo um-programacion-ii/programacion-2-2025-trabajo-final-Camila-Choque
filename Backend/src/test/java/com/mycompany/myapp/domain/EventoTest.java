@@ -1,5 +1,6 @@
 package com.mycompany.myapp.domain;
 
+import static com.mycompany.myapp.domain.AsientosTestSamples.*;
 import static com.mycompany.myapp.domain.EventoTestSamples.*;
 import static com.mycompany.myapp.domain.IntegrantesTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -45,5 +46,27 @@ class EventoTest {
         evento.setIntegrantes(new HashSet<>());
         assertThat(evento.getIntegrantes()).doesNotContain(integrantesBack);
         assertThat(integrantesBack.getEvento()).isNull();
+    }
+
+    @Test
+    void asientosTest() {
+        Evento evento = getEventoRandomSampleGenerator();
+        Asientos asientosBack = getAsientosRandomSampleGenerator();
+
+        evento.addAsientos(asientosBack);
+        assertThat(evento.getAsientos()).containsOnly(asientosBack);
+        assertThat(asientosBack.getEvento()).isEqualTo(evento);
+
+        evento.removeAsientos(asientosBack);
+        assertThat(evento.getAsientos()).doesNotContain(asientosBack);
+        assertThat(asientosBack.getEvento()).isNull();
+
+        evento.asientos(new HashSet<>(Set.of(asientosBack)));
+        assertThat(evento.getAsientos()).containsOnly(asientosBack);
+        assertThat(asientosBack.getEvento()).isEqualTo(evento);
+
+        evento.setAsientos(new HashSet<>());
+        assertThat(evento.getAsientos()).doesNotContain(asientosBack);
+        assertThat(asientosBack.getEvento()).isNull();
     }
 }

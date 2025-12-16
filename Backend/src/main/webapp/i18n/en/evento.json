@@ -31,7 +31,8 @@
       "eventoTipoDescripcion": "Evento Tipo Descripcion",
       "estado": "Estado",
       "ultimaActualizacion": "Ultima Actualizacion",
-      "integrantes": "Integrantes"
+      "integrantes": "Integrantes",
+      "asientos": "Asientos"
     }
   }
 }

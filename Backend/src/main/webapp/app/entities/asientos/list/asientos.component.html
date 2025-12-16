@@ -68,6 +68,12 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
+            <th scope="col" jhiSortBy="evento.id">
+              <div class="d-flex">
+                <span jhiTranslate="backendApp.asientos.evento">Evento</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
             <th scope="col" jhiSortBy="venta.id">
               <div class="d-flex">
                 <span jhiTranslate="backendApp.asientos.venta">Venta</span>
@@ -93,6 +99,13 @@
               <td>{{ asientos.columna }}</td>
               <td>{{ asientos.persona }}</td>
               <td>{{ asientos.estado }}</td>
+              <td>
+                @if (asientos.evento) {
+                  <div>
+                    <a [routerLink]="['/evento', asientos.evento.id, 'view']">{{ asientos.evento.id }}</a>
+                  </div>
+                }
+              </td>
               <td>
                 @if (asientos.venta) {
                   <div>

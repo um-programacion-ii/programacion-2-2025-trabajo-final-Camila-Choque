@@ -1,6 +1,7 @@
 package com.mycompany.myapp.domain;
 
 import static com.mycompany.myapp.domain.AsientosTestSamples.*;
+import static com.mycompany.myapp.domain.EventoTestSamples.*;
 import static com.mycompany.myapp.domain.SesionTestSamples.*;
 import static com.mycompany.myapp.domain.VentaTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,6 +23,18 @@ class AsientosTest {
 
         asientos2 = getAsientosSample2();
         assertThat(asientos1).isNotEqualTo(asientos2);
+    }
+
+    @Test
+    void eventoTest() {
+        Asientos asientos = getAsientosRandomSampleGenerator();
+        Evento eventoBack = getEventoRandomSampleGenerator();
+
+        asientos.setEvento(eventoBack);
+        assertThat(asientos.getEvento()).isEqualTo(eventoBack);
+
+        asientos.evento(null);
+        assertThat(asientos.getEvento()).isNull();
     }
 
     @Test

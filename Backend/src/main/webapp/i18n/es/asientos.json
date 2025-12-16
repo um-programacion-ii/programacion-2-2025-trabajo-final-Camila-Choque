@@ -22,6 +22,7 @@
       "columna": "Columna",
       "persona": "Persona",
       "estado": "Estado",
+      "evento": "Evento",
       "venta": "Venta",
       "sesion": "Sesion"
     }
