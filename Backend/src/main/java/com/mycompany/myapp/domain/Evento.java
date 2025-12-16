@@ -66,6 +66,10 @@ public class Evento implements Serializable {
     @JsonIgnoreProperties(value = { "evento" }, allowSetters = true)
     private Set<Integrantes> integrantes = new HashSet<>();
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "evento")
+    @JsonIgnoreProperties(value = { "evento", "venta", "sesion" }, allowSetters = true)
+    private Set<Asientos> asientos = new HashSet<>();
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public Long getId() {
@@ -278,6 +282,37 @@ public class Evento implements Serializable {
     public Evento removeIntegrantes(Integrantes integrantes) {
         this.integrantes.remove(integrantes);
         integrantes.setEvento(null);
+        return this;
+    }
+
+    public Set<Asientos> getAsientos() {
+        return this.asientos;
+    }
+
+    public void setAsientos(Set<Asientos> asientos) {
+        if (this.asientos != null) {
+            this.asientos.forEach(i -> i.setEvento(null));
+        }
+        if (asientos != null) {
+            asientos.forEach(i -> i.setEvento(this));
+        }
+        this.asientos = asientos;
+    }
+
+    public Evento asientos(Set<Asientos> asientos) {
+        this.setAsientos(asientos);
+        return this;
+    }
+
+    public Evento addAsientos(Asientos asientos) {
+        this.asientos.add(asientos);
+        asientos.setEvento(this);
+        return this;
+    }
+
+    public Evento removeAsientos(Asientos asientos) {
+        this.asientos.remove(asientos);
+        asientos.setEvento(null);
         return this;
     }
 

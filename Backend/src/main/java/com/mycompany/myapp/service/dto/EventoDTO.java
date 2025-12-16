@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 /**
@@ -16,19 +15,32 @@ import java.util.Objects;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventoDTO implements Serializable {
+
     private Long id;
+
     private String titulo;
+
     private String resumen;
+
     private String descripcion;
-    private LocalDateTime fecha;
+
+    private LocalDate fecha;
+
     private String direccion;
+
     private String imagen;
+
     private Integer filaAsientos;
+
     private Integer columnAsientos;
+
     private Double precioEntrada;
+
     private EventoTipoDTO eventoTipo;
+
     private String estado;
-    private LocalDateTime ultimaActualizacion;
+
+    private LocalDate ultimaActualizacion;
 
 
     @Override

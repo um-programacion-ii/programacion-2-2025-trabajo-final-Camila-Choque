@@ -36,6 +36,23 @@
         </div>
 
         <div class="mb-3">
+          <label class="form-label" for="field_evento" jhiTranslate="backendApp.asientos.evento">Evento</label>
+          <select
+            class="form-control"
+            id="field_evento"
+            data-cy="evento"
+            name="evento"
+            formControlName="evento"
+            [compareWith]="compareEvento"
+          >
+            <option [ngValue]="null"></option>
+            @for (eventoOption of eventosSharedCollection; track $index) {
+              <option [ngValue]="eventoOption">{{ eventoOption.id }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
           <label class="form-label" for="field_venta" jhiTranslate="backendApp.asientos.venta">Venta</label>
           <select class="form-control" id="field_venta" data-cy="venta" name="venta" formControlName="venta" [compareWith]="compareVenta">
             <option [ngValue]="null"></option>

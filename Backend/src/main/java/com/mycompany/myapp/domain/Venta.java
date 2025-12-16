@@ -45,7 +45,7 @@ public class Venta implements Serializable {
     private String estado;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "venta")
-    @JsonIgnoreProperties(value = { "venta", "sesion" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "evento", "venta", "sesion" }, allowSetters = true)
     private Set<Asientos> asientos = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

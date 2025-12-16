@@ -7,6 +7,8 @@ import { finalize, map } from 'rxjs/operators';
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { IEvento } from 'app/entities/evento/evento.model';
+import { EventoService } from 'app/entities/evento/service/evento.service';
 import { IVenta } from 'app/entities/venta/venta.model';
 import { VentaService } from 'app/entities/venta/service/venta.service';
 import { ISesion } from 'app/entities/sesion/sesion.model';
@@ -24,17 +26,21 @@ export class AsientosUpdateComponent implements OnInit {
   isSaving = false;
   asientos: IAsientos | null = null;
 
+  eventosSharedCollection: IEvento[] = [];
   ventasSharedCollection: IVenta[] = [];
   sesionsSharedCollection: ISesion[] = [];
 
   protected asientosService = inject(AsientosService);
   protected asientosFormService = inject(AsientosFormService);
+  protected eventoService = inject(EventoService);
   protected ventaService = inject(VentaService);
   protected sesionService = inject(SesionService);
   protected activatedRoute = inject(ActivatedRoute);
 
   // eslint-disable-next-line @typescript-eslint/member-ordering
   editForm: AsientosFormGroup = this.asientosFormService.createAsientosFormGroup();
+
+  compareEvento = (o1: IEvento | null, o2: IEvento | null): boolean => this.eventoService.compareEvento(o1, o2);
 
   compareVenta = (o1: IVenta | null, o2: IVenta | null): boolean => this.ventaService.compareVenta(o1, o2);
 
@@ -88,6 +94,10 @@ export class AsientosUpdateComponent implements OnInit {
     this.asientos = asientos;
     this.asientosFormService.resetForm(this.editForm, asientos);
 
+    this.eventosSharedCollection = this.eventoService.addEventoToCollectionIfMissing<IEvento>(
+      this.eventosSharedCollection,
+      asientos.evento,
+    );
     this.ventasSharedCollection = this.ventaService.addVentaToCollectionIfMissing<IVenta>(this.ventasSharedCollection, asientos.venta);
     this.sesionsSharedCollection = this.sesionService.addSesionToCollectionIfMissing<ISesion>(
       this.sesionsSharedCollection,
@@ -96,6 +106,12 @@ export class AsientosUpdateComponent implements OnInit {
   }
 
   protected loadRelationshipsOptions(): void {
+    this.eventoService
+      .query()
+      .pipe(map((res: HttpResponse<IEvento[]>) => res.body ?? []))
+      .pipe(map((eventos: IEvento[]) => this.eventoService.addEventoToCollectionIfMissing<IEvento>(eventos, this.asientos?.evento)))
+      .subscribe((eventos: IEvento[]) => (this.eventosSharedCollection = eventos));
+
     this.ventaService
       .query()
       .pipe(map((res: HttpResponse<IVenta[]>) => res.body ?? []))

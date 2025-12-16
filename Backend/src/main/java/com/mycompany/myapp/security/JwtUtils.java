@@ -24,7 +24,7 @@ public class JwtUtils {
     @Value("${jhipster.security.authentication.jwt.token-validity-in-seconds}")
     private long jwtValiditySeconds;
 
-    private Key key;
+    private SecretKey key;
 
     @PostConstruct
     public void init() {
@@ -37,7 +37,9 @@ public class JwtUtils {
 
         try {
             log.info("Inicializando JwtUtils con secreto Base64");
-            key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(base64Secret));
+            byte[] keyBytes = Base64.getDecoder().decode(base64Secret);
+            this.key = Keys.hmacShaKeyFor(keyBytes);
+
             log.info("JwtUtils inicializado correctamente");
         } catch (IllegalArgumentException e) {
             log.error("ERROR: El secreto Base64 no es válido: {}", e.getMessage());
@@ -61,8 +63,7 @@ public class JwtUtils {
      * Obtiene la clave secreta para validar el token
      */
     private SecretKey getSigningKey() {
-        byte[] keyBytes = base64Secret.getBytes(StandardCharsets.UTF_8);
-        return Keys.hmacShaKeyFor(keyBytes);
+       return key;
     }
 
     /**

@@ -1,5 +1,6 @@
 package com.example.Proxy.domain;
 import com.example.Proxy.dto.*;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -10,14 +11,18 @@ import java.util.List;
 @Component
 public class CatedraClient {
 
-    private final WebClient webClient;
+    @Qualifier("catedraWebClient")
+    private final WebClient catedraWebClient;
+
     private static final Logger logger = LoggerFactory.getLogger(CatedraClient.class);
-    private final String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtLmNob3F1ZSIsImV4cCI6MTc2Nzk5OTYyMCwiYXV0aCI6IlJPTEVfVVNFUiIsImlhdCI6MTc2NTQwNzYyMH0.5gWtqudeKhTKJbjFKc1fRJdLm3hZl58Y2WcaHjhBVMPOlxhPsRUeUnCmdt2LYSpcEzep9b42uB5WgTga3aqc8Q";
-    public CatedraClient(WebClient webClient) {
-        this.webClient = webClient;
+
+    private final String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtLmNob3F1ZSIsImV4cCI6MTc2ODQyMTg1NiwiYXV0aCI6IlJPTEVfVVNFUiIsImlhdCI6MTc2NTgyOTg1Nn0.nhHk1qSi41Xy0bYOUp4PVCxtHv6y3UqAZNLBqxOSEz_TKwBXclZoM5yTnsT6KK6GRUJYRZf7FmxF7eZcYbkS_Q";
+
+    public CatedraClient(WebClient catedraWebClient) {
+        this.catedraWebClient = catedraWebClient;
 
         try {
-            String base = webClient.mutate().build().toString();
+            String base = catedraWebClient.mutate().build().toString();
             logger.info("CatedraClient constructed, WebClient.toString(): {}", base);
         } catch (Exception e) {
             logger.debug("No se pudo obtener representación del WebClient: {}", e.getMessage());
@@ -26,7 +31,7 @@ public class CatedraClient {
 
     public RegistrarUsuarioResponse registarUsuario(RegistrarUsuarioDto dto) {
         logger.info("Invocando endpoint POST /agregar_usuario usando WebClient");
-        return webClient.post()
+        return catedraWebClient.post()
             .uri("/v1/agregar_usuario")
             .bodyValue(dto)
             .retrieve()
@@ -36,7 +41,7 @@ public class CatedraClient {
 
     public String login(LoginDto dto) {
         logger.info("Invocando endpoint POST /agregar_usuario usando WebClient");
-        return webClient.post()
+        return catedraWebClient.post()
                 .uri("/autenticate")
                 .bodyValue(dto)
                 .retrieve()
@@ -46,7 +51,7 @@ public class CatedraClient {
 
     public List<EventoResumidoDto> conseguirEventosResumidos() {
         logger.info("Invocando endpoint GET /eventos_resumidos usando WebClient");
-        return webClient.get()
+        return catedraWebClient.get()
                 .uri("/endpoints/v1/eventos-resumidos")
                 .header("Authorization", "Bearer " + token)
                 .retrieve()
@@ -56,9 +61,9 @@ public class CatedraClient {
 
     public List<EventoDto> conseguirEventos() {
         logger.info("Invocando endpoint GET /eventos usando WebClient");
-        logger.info("Llamando a: {}/eventos", webClient.toString());
+        logger.info("Llamando a: {}/eventos", catedraWebClient.toString());
 
-        return webClient.get()
+        return catedraWebClient.get()
                 .uri("/endpoints/v1/eventos")
                 .header("Authorization", "Bearer " + token)
                 .retrieve()
@@ -68,7 +73,7 @@ public class CatedraClient {
 
     public EventoDto conseguirEventosPorId(Long id) {
         logger.info("Invocando endpoint GET /eventos/{id} usando WebClient");
-        return webClient.get()
+        return catedraWebClient.get()
                 .uri("/endpoints/v1/evento/{id}", id)
                 .header("Authorization", "Bearer " + token)
                 .retrieve()
@@ -77,7 +82,7 @@ public class CatedraClient {
     }
     public BloquearAsientosDTO bloquearAsientos (BloquearAsientosRequest request){
         logger.info("Invocando endpoint POST /bloquear-asientos usando WebClient");
-        return webClient.post()
+        return catedraWebClient.post()
                 .uri("/endpoints/v1/bloquear-asientos")
                 .header("Authorization", "Bearer " + token)
                 .bodyValue(request)

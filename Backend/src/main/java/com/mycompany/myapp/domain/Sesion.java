@@ -39,7 +39,7 @@ public class Sesion implements Serializable {
     private LocalDate expiraEn;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "sesion")
-    @JsonIgnoreProperties(value = { "venta", "sesion" }, allowSetters = true)
+    @JsonIgnoreProperties(value = { "evento", "venta", "sesion" }, allowSetters = true)
     private Set<Asientos> asientos = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

@@ -83,6 +83,7 @@ public class CacheConfiguration {
             createCache(cm, com.mycompany.myapp.domain.Evento.class.getName() + ".integrantes", jcacheConfiguration);
             createCache(cm, com.mycompany.myapp.domain.Venta.class.getName() + ".asientos", jcacheConfiguration);
             createCache(cm, com.mycompany.myapp.domain.Sesion.class.getName() + ".asientos", jcacheConfiguration);
+            createCache(cm, com.mycompany.myapp.domain.Evento.class.getName() + ".asientos", jcacheConfiguration);
             // jhipster-needle-redis-add-entry
         };
     }

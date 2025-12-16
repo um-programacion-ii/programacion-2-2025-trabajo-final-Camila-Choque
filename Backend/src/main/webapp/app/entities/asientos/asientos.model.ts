@@ -1,3 +1,4 @@
+import { IEvento } from 'app/entities/evento/evento.model';
 import { IVenta } from 'app/entities/venta/venta.model';
 import { ISesion } from 'app/entities/sesion/sesion.model';
 
@@ -7,6 +8,7 @@ export interface IAsientos {
   columna?: number | null;
   persona?: string | null;
   estado?: string | null;
+  evento?: Pick<IEvento, 'id'> | null;
   venta?: Pick<IVenta, 'id'> | null;
   sesion?: Pick<ISesion, 'id'> | null;
 }

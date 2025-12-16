@@ -31,6 +31,14 @@
           <dd>
             <span>{{ asientosRef.estado }}</span>
           </dd>
+          <dt><span jhiTranslate="backendApp.asientos.evento">Evento</span></dt>
+          <dd>
+            @if (asientos()!.evento) {
+              <div>
+                <a [routerLink]="['/evento', asientos()!.evento?.id, 'view']">{{ asientosRef.evento?.id }}</a>
+              </div>
+            }
+          </dd>
           <dt><span jhiTranslate="backendApp.asientos.venta">Venta</span></dt>
           <dd>
             @if (asientos()!.venta) {

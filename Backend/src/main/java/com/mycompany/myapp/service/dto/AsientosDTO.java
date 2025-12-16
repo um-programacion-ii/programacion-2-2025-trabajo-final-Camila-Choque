@@ -19,6 +19,8 @@ public class AsientosDTO implements Serializable {
 
     private String estado;
 
+    private EventoDTO evento;
+
     private VentaDTO venta;
 
     private SesionDTO sesion;
@@ -61,6 +63,14 @@ public class AsientosDTO implements Serializable {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public EventoDTO getEvento() {
+        return evento;
+    }
+
+    public void setEvento(EventoDTO evento) {
+        this.evento = evento;
     }
 
     public VentaDTO getVenta() {
@@ -109,6 +119,7 @@ public class AsientosDTO implements Serializable {
             ", columna=" + getColumna() +
             ", persona='" + getPersona() + "'" +
             ", estado='" + getEstado() + "'" +
+            ", evento=" + getEvento() +
             ", venta=" + getVenta() +
             ", sesion=" + getSesion() +
             "}";
