@@ -18,6 +18,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,18 +30,30 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import org.example.project.Routeo.Interfaz
 import org.example.project.proxy.EstadoLogin
 import org.example.project.proxy.ModeloLogin
 
 
 @Composable
-fun LoginScreen(
-    viewModel: ModeloLogin = ModeloLogin()
-) {
+fun LoginScreen(viewModel: ModeloLogin = ModeloLogin(),
+                cambioDePantalla:() -> Unit) {
+
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var currentScreen by remember { mutableStateOf<Interfaz>(Interfaz.Login) }
 
+    LoginScreen(
+        cambioDePantalla = {
+            currentScreen = Interfaz.ListarEventos
+        }
+    )
     val state by viewModel.uiState.collectAsState()
+    LaunchedEffect(state) {
+        if (state is EstadoLogin.Exitoso) {
+            cambioDePantalla()
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -138,10 +151,7 @@ fun LoginScreen(
                         )
 
                     is EstadoLogin.Exitoso ->
-                        Text(
-                            text = "Login correcto ✅",
-                            color = Color(0xFF2E7D32)
-                        )
+                        cambioDePantalla();
 
                     is EstadoLogin.Error ->
                         Text(

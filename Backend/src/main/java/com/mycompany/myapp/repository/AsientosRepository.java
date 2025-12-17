@@ -13,4 +13,5 @@ import java.util.List;
 @Repository
 public interface AsientosRepository extends JpaRepository<Asientos, Long> {
     List<Asientos> findByEventoId(Long eventoId);
+    void deleteByEventoId(Long eventoId);
 }

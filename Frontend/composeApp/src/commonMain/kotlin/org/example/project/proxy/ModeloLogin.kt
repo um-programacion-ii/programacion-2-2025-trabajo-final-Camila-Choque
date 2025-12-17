@@ -20,7 +20,7 @@ class ModeloLogin() : ViewModel(){
                 _uiState.value = EstadoLogin.Exitoso(token)
             } catch (e: Exception) {
                 _uiState.value =
-                    EstadoLogin.Error("Usuario o contraseña incorrectos")
+                    EstadoLogin.Error("Credenciales Incorrectas")
             }
         }
     }

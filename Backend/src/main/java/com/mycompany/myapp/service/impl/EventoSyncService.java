@@ -3,22 +3,19 @@ import com.mycompany.myapp.domain.Asientos;
 import com.mycompany.myapp.domain.Evento;
 import com.mycompany.myapp.repository.AsientosRepository;
 import com.mycompany.myapp.repository.EventoRepository;
-import com.mycompany.myapp.service.CatedraServices;
 import com.mycompany.myapp.service.client.ProxyClient;
+import com.mycompany.myapp.service.dto.AsientosCompletoDTO;
 import com.mycompany.myapp.service.dto.EventoDTO;
-import com.mycompany.myapp.service.mapper.EventoMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-// Congifuracion de Kafka realizada con IA
 
 @Service
 @Slf4j
@@ -66,36 +63,27 @@ public class EventoSyncService {
      * Sincroniza un evento individual
      */
     private void sincronizarEvento(EventoDTO eventoDTO) {
-        try {
 
-            boolean eventoNuevo = !eventoRepository.existsById(eventoDTO.getId());
+        Evento evento = eventoRepository.findById(eventoDTO.getId())
+            .orElse(new Evento());
 
-            Evento evento = eventoRepository.findById(eventoDTO.getId())
-                .orElse(new Evento());
+        evento.setId(eventoDTO.getId());
+        evento.setTitulo(eventoDTO.getTitulo());
+        evento.setDescripcion(eventoDTO.getDescripcion());
+        evento.setFecha(eventoDTO.getFecha());
+        evento.setFilaAsientos(eventoDTO.getFilaAsientos());
+        evento.setColumnaAsientos(eventoDTO.getColumnAsientos());
+        evento.setPrecioEntrada(eventoDTO.getPrecioEntrada());
+        evento.setEstado("ACTIVO");
 
-            evento.setId(eventoDTO.getId());
-            evento.setTitulo(eventoDTO.getTitulo());
-            evento.setDescripcion(eventoDTO.getDescripcion());
-            evento.setFecha(eventoDTO.getFecha());
-            evento.setFilaAsientos(eventoDTO.getFilaAsientos());
-            evento.setColumnaAsientos(eventoDTO.getColumnAsientos());
-            evento.setPrecioEntrada(eventoDTO.getPrecioEntrada());
-            evento.setEstado("ACTIVO");
+        eventoRepository.save(evento);
 
-            eventoRepository.save(evento);
+        // 🔥 SIEMPRE recalcular asientos
+        sincronizarAsientos(evento);
 
-            // 👇 SOLO si el evento es nuevo
-            if (eventoNuevo) {
-                generarAsientos(evento);
-                log.info("Asientos generados para evento {}", evento.getId());
-            }
-
-            log.debug("Evento {} sincronizado", evento.getTitulo());
-
-        } catch (Exception e) {
-            log.error("Error sincronizando evento {}: {}", eventoDTO.getId(), e.getMessage());
-        }
+        log.debug("Evento {} sincronizado con asientos", evento.getTitulo());
     }
+
 
 
     /**
@@ -144,5 +132,50 @@ public class EventoSyncService {
 
         asientosRepository.saveAll(asientos);
     }
+
+
+    private void sincronizarAsientos(Evento evento) {
+
+        int filas = evento.getFilaAsientos();
+        int columnas = evento.getColumnaAsientos();
+
+        // Asientos ocupados desde Redis
+        List<AsientosCompletoDTO> ocupados =
+            proxyClient.getAsientosNoDisponibles(evento.getId());
+
+        Map<String, String> estadoPorPosicion = new HashMap<>();
+        for (AsientosCompletoDTO dto : ocupados) {
+            String key = dto.getFila().toString() + "-" + dto.getColumna().toString();
+            estadoPorPosicion.put(key, dto.getEstado());
+        }
+
+        // Eliminar asientos viejos del evento
+        asientosRepository.deleteByEventoId(evento.getId());
+
+        List<Asientos> nuevos = new ArrayList<>();
+
+        // Generar todos los asientos
+        for (int f = 1; f <= filas; f++) {
+            for (int c = 1; c <= columnas; c++) {
+
+                String key = f + "-" + c;
+                String estado = estadoPorPosicion.getOrDefault(key, "DISPONIBLE");
+
+                Asientos asiento = new Asientos();
+                asiento.setFila(f);
+                asiento.setColumna(c);
+                asiento.setEstado(estado);
+                asiento.setEvento(evento);
+
+                nuevos.add(asiento);
+            }
+        }
+
+        asientosRepository.saveAll(nuevos);
+
+        log.info("Asientos sincronizados para evento {} (total: {})",
+            evento.getId(), nuevos.size());
+    }
+
 
 }

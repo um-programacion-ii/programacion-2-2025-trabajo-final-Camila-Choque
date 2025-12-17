@@ -1,5 +1,4 @@
 package com.example.Proxy.domain;
-import com.example.Proxy.enum_proxy.Modifications;
 import com.example.Proxy.services.BackendNotificationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

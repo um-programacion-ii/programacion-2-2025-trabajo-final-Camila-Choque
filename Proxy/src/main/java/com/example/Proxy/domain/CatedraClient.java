@@ -2,10 +2,12 @@ package com.example.Proxy.domain;
 import com.example.Proxy.dto.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import reactor.core.publisher.Mono;
 import java.util.List;
 
 @Component
@@ -58,18 +60,42 @@ public class CatedraClient {
                 .bodyToMono(new ParameterizedTypeReference<List<EventoResumidoDto>>() {})
                 .block();
     }
-
+    //IA
     public List<EventoDto> conseguirEventos() {
         logger.info("Invocando endpoint GET /eventos usando WebClient");
-        logger.info("Llamando a: {}/eventos", catedraWebClient.toString());
+        logger.info("Llamando a: {}/endpoints/v1/eventos", catedraWebClient);
 
-        return catedraWebClient.get()
-                .uri("/endpoints/v1/eventos")
-                .header("Authorization", "Bearer " + token)
-                .retrieve()
-                .bodyToMono(new ParameterizedTypeReference<List<EventoDto>>() {})
-                .block();
+        try {
+            return catedraWebClient.get()
+                    .uri("/endpoints/v1/eventos")
+                    .header("Authorization", "Bearer " + token)
+                    .retrieve()
+                    .onStatus(
+                            HttpStatusCode::isError,
+                            response -> response.bodyToMono(String.class)
+                                    .flatMap(body -> {
+                                        logger.error(
+                                                "Error desde servicio cátedra. Status: {} - Body: {}",
+                                                response.statusCode(),
+                                                body
+                                        );
+                                        return Mono.error(
+                                                new RuntimeException("Error al obtener eventos desde la cátedra")
+                                        );
+                                    })
+                    )
+                    .bodyToFlux(EventoDto.class)
+                    .collectList()
+                    .doOnNext(eventos ->
+                            logger.info("Eventos recibidos desde cátedra: {}", eventos.size())
+                    )
+                    .block();
+        } catch (Exception e) {
+            logger.error("Excepción llamando al servicio de cátedra", e);
+            return List.of(); // fallback seguro
+        }
     }
+
 
     public EventoDto conseguirEventosPorId(Long id) {
         logger.info("Invocando endpoint GET /eventos/{id} usando WebClient");

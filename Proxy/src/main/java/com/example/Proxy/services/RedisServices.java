@@ -1,6 +1,6 @@
 package com.example.Proxy.services;
 import com.example.Proxy.dto.AsientoRedis;
-import com.example.Proxy.dto.AsientosDTO;
+import com.example.Proxy.dto.AsientosCompletosDTO;
 import com.example.Proxy.dto.AsientosRedisDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
@@ -66,14 +66,20 @@ public class RedisServices {
      * @param eventoId ID del evento
      * @return Lista de identificadores de asientos no disponibles
      */
-    public List<String> getAsientosNoDisponibles(Long eventoId) {
+    public List<AsientosCompletosDTO> getAsientosNoDisponibles(Long eventoId) {
+
         AsientosRedisDTO datos = getAsientosEvento(eventoId);
 
         return datos.getAsientos().stream()
                 .filter(asiento -> asiento.esVendido() || asiento.esBloqueadoValido())
-                .map(AsientoRedis::getIdentificador)
+                .map(asiento -> new AsientosCompletosDTO(
+                        asiento.esVendido() ? "VENDIDO" : "BLOQUEADO",
+                        asiento.getFila(),
+                        asiento.getColumna()
+                ))
                 .collect(Collectors.toList());
     }
+
 
     /**
      * Obtiene solo los asientos vendidos

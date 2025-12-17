@@ -1,5 +1,4 @@
 package com.mycompany.myapp.config;
-
 import static org.springframework.security.config.Customizer.withDefaults;
 import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
 import com.mycompany.myapp.filtro.SessionFilter;

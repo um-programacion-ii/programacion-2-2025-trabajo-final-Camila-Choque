@@ -18,12 +18,23 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import frontend.composeapp.generated.resources.Res
 import frontend.composeapp.generated.resources.compose_multiplatform
+import org.example.project.Routeo.Interfaz
 import org.example.project.interfaz.LoginScreen
 
 @Composable
-@Preview
 fun App() {
-    MaterialTheme {
-        LoginScreen()
+    var currentScreen by remember { mutableStateOf<Interfaz>(Interfaz.Login) }
+
+    when (val screen = currentScreen) {
+
+        Interfaz.Login -> {
+            LoginScreen(
+                cambioDePantalla = {
+                    currentScreen = Interfaz.ListarEventos
+                }
+            )
+        }
+
+        Interfaz.ListarEventos -> TODO()
     }
 }
