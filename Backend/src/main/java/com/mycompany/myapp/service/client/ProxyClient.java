@@ -1,8 +1,5 @@
 package com.mycompany.myapp.service.client;
-import com.mycompany.myapp.service.dto.AsientosRedisDTO;
-import com.mycompany.myapp.service.dto.BloquearAsientosDTO;
-import com.mycompany.myapp.service.dto.EventoDTO;
-import com.mycompany.myapp.service.dto.EventoResumidoDTO;
+import com.mycompany.myapp.service.dto.*;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
@@ -77,12 +74,12 @@ public class ProxyClient {
             .block();
     }
 
-    public List<String> getAsientosNoDisponibles(Long eventoId){
+    public List<AsientosCompletoDTO> getAsientosNoDisponibles(Long eventoId){
         return proxyWebClient.get()
             .uri("/proxy/asientos/evento/{eventoId}/no-disponibles", eventoId)
             .accept(MediaType.APPLICATION_JSON)
             .retrieve()
-            .bodyToFlux(String.class)
+            .bodyToFlux(AsientosCompletoDTO.class)
             .collectList()
             .block();
     }

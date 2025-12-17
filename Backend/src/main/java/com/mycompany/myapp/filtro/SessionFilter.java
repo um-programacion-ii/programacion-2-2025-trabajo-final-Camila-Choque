@@ -37,7 +37,6 @@ public class SessionFilter extends OncePerRequestFilter {
     }
 
 
-
     @Override
     protected void doFilterInternal(
         HttpServletRequest request,

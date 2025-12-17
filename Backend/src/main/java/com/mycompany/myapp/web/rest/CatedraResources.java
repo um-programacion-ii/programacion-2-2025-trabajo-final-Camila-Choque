@@ -53,7 +53,7 @@ public class CatedraResources {
     }
 
     @GetMapping("/asientos/evento/{eventoId}/no-disponibles")
-    public List<String> getAsientosNoDisponibles(@PathVariable Long eventoId) {
+    public List<AsientosCompletoDTO> getAsientosNoDisponibles(@PathVariable Long eventoId) {
         return catedraServices.getAsientosNoDisponibles(eventoId);
     }
     @GetMapping("/asientos/evento/{eventoId}/vendidos")

@@ -1,9 +1,6 @@
 package com.mycompany.myapp.service;
 import com.mycompany.myapp.service.client.ProxyClient;
-import com.mycompany.myapp.service.dto.AsientosRedisDTO;
-import com.mycompany.myapp.service.dto.BloquearAsientosDTO;
-import com.mycompany.myapp.service.dto.EventoDTO;
-import com.mycompany.myapp.service.dto.EventoResumidoDTO;
+import com.mycompany.myapp.service.dto.*;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
@@ -35,7 +32,7 @@ public class CatedraServices {
         return proxyClient.getAsientosEvento(eventoId);
     }
 
-    public List<String> getAsientosNoDisponibles(Long eventoId) {
+    public List<AsientosCompletoDTO> getAsientosNoDisponibles(Long eventoId) {
         return proxyClient.getAsientosNoDisponibles(eventoId);
     }
 

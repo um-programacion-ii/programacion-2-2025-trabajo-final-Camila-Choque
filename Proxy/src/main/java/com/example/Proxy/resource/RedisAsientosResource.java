@@ -1,5 +1,6 @@
 package com.example.Proxy.resource;
 import com.example.Proxy.dto.AsientoRedis;
+import com.example.Proxy.dto.AsientosCompletosDTO;
 import com.example.Proxy.dto.AsientosRedisDTO;
 import com.example.Proxy.services.RedisServices;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +36,9 @@ public class RedisAsientosResource {
      * Obtiene lista de identificadores de asientos NO disponibles
      */
     @GetMapping("/evento/{eventoId}/no-disponibles")
-    public ResponseEntity<List<String>> getAsientosNoDisponibles(@PathVariable Long eventoId) {
+    public ResponseEntity<List<AsientosCompletosDTO>> getAsientosNoDisponibles(@PathVariable Long eventoId) {
         log.info("Consultando asientos no disponibles para evento {}", eventoId);
-        List<String> noDisponibles = redisServices.getAsientosNoDisponibles(eventoId);
+        List<AsientosCompletosDTO> noDisponibles = redisServices.getAsientosNoDisponibles(eventoId);
         return ResponseEntity.ok(noDisponibles);
     }
 

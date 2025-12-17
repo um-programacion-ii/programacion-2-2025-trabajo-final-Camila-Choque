@@ -2,11 +2,13 @@ package org.example.project.proxy
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
 import io.ktor.client.request.post
 import io.ktor.client.request.setBody
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import org.example.project.dto.EventoDTO
 import org.example.project.dto.LoginDTO
 
 object ApiClient {
@@ -30,4 +32,14 @@ object ApiClient {
 
         return response
     }
+
+    suspend fun obtenerEventos(): List<EventoDTO>{
+        return client.get("http://localhost:8081/api/catedra/eventos").body()
+    }
+
+    suspend fun obtenerEventosPorId(id: Long): EventoDTO {
+        return client.get("http://localhost:8081/api/catedra/eventos/$id").body()
+    }
+
+
 }
