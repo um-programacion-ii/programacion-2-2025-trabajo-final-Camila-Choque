@@ -3,6 +3,7 @@ package com.mycompany.myapp.domain;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -33,7 +34,7 @@ public class Evento implements Serializable {
     private String descripcion;
 
     @Column(name = "fecha")
-    private LocalDate fecha;
+    private Instant fecha;
 
     @Column(name = "direccion")
     private String direccion;
@@ -124,16 +125,16 @@ public class Evento implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public LocalDate getFecha() {
+    public Instant getFecha() {
         return this.fecha;
     }
 
-    public Evento fecha(LocalDate fecha) {
+    public Evento fecha(Instant fecha) {
         this.setFecha(fecha);
         return this;
     }
 
-    public void setFecha(LocalDate fecha) {
+    public void setFecha(Instant fecha) {
         this.fecha = fecha;
     }
 

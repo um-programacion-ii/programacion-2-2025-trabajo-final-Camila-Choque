@@ -1,15 +1,16 @@
-package com.example.Proxy.dto;
-import com.fasterxml.jackson.annotation.JsonFormat;
+package com.mycompany.myapp.service.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import java.io.Serializable;
 import java.time.Instant;
 import java.util.List;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class EventoDto {
-
+public class EventoExternoDTO implements Serializable {
+    private Long id;
     private String titulo;
     private String resumen;
     private String descripcion;
@@ -20,9 +21,5 @@ public class EventoDto {
     private Integer columnAsientos;
     private Double precioEntrada;
     private EventoTipoDTO eventoTipo;
-    private List<IntegrantedDto> integrantes;
-    private Long id;
-
-
-
+    private List<IntegrantesExternosDTO> integrantes;
 }

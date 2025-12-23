@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class EventoTipoDTO {
-    private String eventoTipoNombre;
-    private String eventoTipoDescripcion;
+    private String nombre;
+    private String descripcion;
 
 
 

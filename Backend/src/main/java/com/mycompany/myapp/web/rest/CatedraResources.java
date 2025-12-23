@@ -30,11 +30,11 @@ public class CatedraResources {
     }
 
     @GetMapping("eventos/{id}")
-    public EventoDTO conseguirEvento(@PathVariable Long id) {
+    public EventoExternoDTO conseguirEvento(@PathVariable Long id) {
         return catedraServices.conseguirEventoPorId(id.toString());
     }
     @GetMapping("/eventos")
-    public List<EventoDTO> conseguirEventos() {
+    public List<EventoExternoDTO> conseguirEventos() {
         return catedraServices.conseguirEventos();
     }
 
@@ -81,8 +81,10 @@ public class CatedraResources {
     }
 
     @GetMapping("/asientos/evento/{eventoId}/disponibles")
-    public List<AsientosDisponiblesDTO> getAsientosDisponibles(@PathVariable Long eventoId) {
-        return disponibilidadAsientosService.obtenerAsientosDisponibles(eventoId);
+    public MapaAsientosDTO getAsientosDisponibles(
+        @PathVariable Long eventoId
+    ) {
+        return disponibilidadAsientosService.obtenerMapaAsientos(eventoId);
     }
     @PostMapping("/venta")
     public VentaAsientosResponse realizarVenta(@RequestBody VentaAsientosRequest body) {
