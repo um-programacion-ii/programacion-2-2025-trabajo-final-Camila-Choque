@@ -1,4 +1,4 @@
-package org.example.project.proxy
+package org.example.project.Navegacion
 import io.ktor.client.network.sockets.ConnectTimeoutException
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.plugins.HttpRequestTimeoutException
@@ -7,8 +7,9 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import org.example.project.dto.LoginDTO
 import org.example.project.estados.EstadoLogin
+import org.example.project.proxy.ApiClient
 
-class ModeloLogin{
+class PantallaLogin {
     private val _uiState = MutableStateFlow<EstadoLogin>(EstadoLogin.Estatico)
     val uiState: StateFlow<EstadoLogin> = _uiState.asStateFlow()
 
@@ -41,5 +42,4 @@ class ModeloLogin{
     fun resetState() {
         _uiState.value = EstadoLogin.Estatico
     }
-
 }

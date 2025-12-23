@@ -18,7 +18,6 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 
 import frontend.composeapp.generated.resources.Res
 import frontend.composeapp.generated.resources.compose_multiplatform
-import org.example.project.Routeo.Interfaz
 import org.example.project.interfaz.LoginScreen
 
 @Composable
