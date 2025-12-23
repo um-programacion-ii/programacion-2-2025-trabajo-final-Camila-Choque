@@ -1,59 +1,73 @@
 package com.mycompany.myapp.service.impl;
 import com.mycompany.myapp.domain.Asientos;
+import com.mycompany.myapp.domain.Evento;
 import com.mycompany.myapp.repository.AsientosRepository;
+import com.mycompany.myapp.repository.EventoRepository;
 import com.mycompany.myapp.service.CatedraServices;
-import com.mycompany.myapp.service.dto.AsientosDisponiblesDTO;
-import com.mycompany.myapp.service.dto.AsientosRedisDTO;
+import com.mycompany.myapp.service.dto.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.List;
-import java.util.Set;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
 public class AsientosDisponiblesService {
 
-    private final AsientosRepository asientosRepository;
     private final CatedraServices catedraServices;
+    private final EventoRepository eventoRepository;
 
     public AsientosDisponiblesService(
         AsientosRepository asientosRepository,
-        CatedraServices catedraServices) {
+        CatedraServices catedraServices, EventoRepository eventoRepository) {
 
-        this.asientosRepository = asientosRepository;
         this.catedraServices = catedraServices;
+        this.eventoRepository = eventoRepository;
     }
 
-    public List<AsientosDisponiblesDTO> obtenerAsientosDisponibles(Long eventoId) {
+    public MapaAsientosDTO obtenerMapaAsientos(Long eventoId) {
 
+        Evento evento = eventoRepository.findById(eventoId)
+            .orElseThrow(() -> new IllegalArgumentException("Evento inexistente"));
 
-        List<Asientos> asientosBD =
-            asientosRepository.findByEventoId(eventoId);
+        // Redis
+        AsientosRedisDTO redisDTO = catedraServices.getAsientos(eventoId);
 
-        AsientosRedisDTO redisDTO =
-            catedraServices.getAsientos(eventoId);
+        Map<String, String> estadoPorPosicion = new HashMap<>();
 
-        Set<String> noDisponibles = redisDTO.getAsientos().stream()
-            .filter(a ->
-                "Bloqueado".equalsIgnoreCase(a.getEstado()) ||
-                    "Vendido".equalsIgnoreCase(a.getEstado())
-            )
-            .map(a -> a.getFila() + "-" + a.getColumna())
-            .collect(Collectors.toSet());
-        return asientosBD.stream()
-            .filter(a ->
-                !noDisponibles.contains(
-                    a.getFila() + "-" + a.getColumna()
-                )
-            )
-            .map(a ->
-                new AsientosDisponiblesDTO(
-                    a.getFila(),
-                    a.getColumna()
-                )
-            )
-            .toList();
+        for (AsientosRedis a : redisDTO.getAsientos()) {
+            String key = a.getFila() + "-" + a.getColumna();
+
+            if ("Vendido".equalsIgnoreCase(a.getEstado())) {
+                estadoPorPosicion.put(key, "VENDIDO");
+            }
+            else if (a.esBloqueadoValido()) {
+                estadoPorPosicion.put(key, "BLOQUEADO");
+            }
+        }
+
+        List<FilaAsientosDTO> filas = new ArrayList<>();
+
+        for (int f = 1; f <= evento.getFilaAsientos(); f++) {
+            List<FilaAsientosDTO.AsientoEstadoDTO> columnas = new ArrayList<>();
+
+            for (int c = 1; c <= evento.getColumnaAsientos(); c++) {
+                String key = f + "-" + c;
+                String estado = estadoPorPosicion.getOrDefault(key, "DISPONIBLE");
+
+                columnas.add(new FilaAsientosDTO.AsientoEstadoDTO(c, estado));
+            }
+
+            filas.add(new FilaAsientosDTO(f, columnas));
+        }
+
+        return new MapaAsientosDTO(
+            eventoId,
+            evento.getFilaAsientos(),
+            evento.getColumnaAsientos(),
+            filas
+        );
     }
 }
 

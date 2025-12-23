@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -24,7 +25,7 @@ public class EventoDTO implements Serializable {
 
     private String descripcion;
 
-    private LocalDate fecha;
+    private Instant fecha;
 
     private String direccion;
 

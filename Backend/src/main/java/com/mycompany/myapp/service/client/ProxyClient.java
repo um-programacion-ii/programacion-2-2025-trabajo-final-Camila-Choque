@@ -27,12 +27,12 @@ public class ProxyClient {
                 .block();
     }
 
-    public EventoDTO conseguirEventoPorId(String eventoId) {
+    public EventoExternoDTO conseguirEventoPorId(String eventoId) {
         return proxyWebClient.get()
                 .uri("/proxy/eventos/{id}", eventoId)
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToMono(EventoDTO.class)
+                .bodyToMono(EventoExternoDTO.class)
                 .block();
     }
     public List<EventoResumidoDTO> conseguirEventosResumidos() {
@@ -46,12 +46,12 @@ public class ProxyClient {
     }
 
 
-    public List<EventoDTO> conseguirEventos() {
+    public List<EventoExternoDTO> conseguirEventos() {
         return proxyWebClient.get()
                 .uri("/proxy/eventos")
                 .accept(MediaType.APPLICATION_JSON)
                 .retrieve()
-                .bodyToFlux(EventoDTO.class)
+                .bodyToFlux(EventoExternoDTO.class)
                 .collectList()
                 .block();
     }

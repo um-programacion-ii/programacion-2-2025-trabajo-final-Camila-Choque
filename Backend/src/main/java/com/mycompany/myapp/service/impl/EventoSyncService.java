@@ -5,14 +5,13 @@ import com.mycompany.myapp.repository.AsientosRepository;
 import com.mycompany.myapp.repository.EventoRepository;
 import com.mycompany.myapp.service.client.ProxyClient;
 import com.mycompany.myapp.service.dto.AsientosCompletoDTO;
-import com.mycompany.myapp.service.dto.EventoDTO;
+import com.mycompany.myapp.service.dto.EventoExternoDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -22,12 +21,8 @@ import java.util.Map;
 public class EventoSyncService {
     @Autowired
     private ProxyClient proxyClient;
-
     @Autowired
     private EventoRepository eventoRepository;
-
-    @Autowired
-    private AsientosRepository asientosRepository;
 
     /**
      * Sincroniza todos los eventos desde la cátedra
@@ -40,12 +35,12 @@ public class EventoSyncService {
 
         try {
             // Obtener todos los eventos desde la cátedra
-            List<EventoDTO> eventosActualizados = proxyClient.conseguirEventos();
+            List<EventoExternoDTO> eventosActualizados = proxyClient.conseguirEventos();
 
             log.info("Se obtuvieron {} eventos de la cátedra", eventosActualizados.size());
 
             // Actualizar o crear eventos en la BD local
-            for (EventoDTO eventoDTO : eventosActualizados) {
+            for (EventoExternoDTO eventoDTO : eventosActualizados) {
                 sincronizarEvento(eventoDTO);
             }
 
@@ -62,45 +57,43 @@ public class EventoSyncService {
     /**
      * Sincroniza un evento individual
      */
-    private void sincronizarEvento(EventoDTO eventoDTO) {
+    private void sincronizarEvento(EventoExternoDTO eventoDTO) {
 
         Evento evento = eventoRepository.findById(eventoDTO.getId())
             .orElse(new Evento());
 
         evento.setId(eventoDTO.getId());
         evento.setTitulo(eventoDTO.getTitulo());
+        evento.setResumen(eventoDTO.getResumen());
         evento.setDescripcion(eventoDTO.getDescripcion());
         evento.setFecha(eventoDTO.getFecha());
         evento.setFilaAsientos(eventoDTO.getFilaAsientos());
         evento.setColumnaAsientos(eventoDTO.getColumnAsientos());
         evento.setPrecioEntrada(eventoDTO.getPrecioEntrada());
+        evento.setEventoTipoNombre(eventoDTO.getEventoTipo().getNombre());
+        evento.setEventoTipoDescripcion(eventoDTO.getEventoTipo().getDescripcion());
         evento.setEstado("ACTIVO");
+        evento.setUltimaActualizacion(LocalDate.now());
 
         eventoRepository.save(evento);
-
-        // 🔥 SIEMPRE recalcular asientos
-        sincronizarAsientos(evento);
 
         log.debug("Evento {} sincronizado con asientos", evento.getTitulo());
     }
 
-
-
     /**
      * Marca como eliminados los eventos que ya no existen en la cátedra
      */
-    private void marcarEventosEliminados(List<EventoDTO> eventosActualizados) {
+    private void marcarEventosEliminados(List<EventoExternoDTO> eventosActualizados) {
         try {
             List<Long> idsActualizados = eventosActualizados.stream()
-                .map(EventoDTO::getId)
+                .map(EventoExternoDTO::getId)
                 .toList();
 
-            List<Evento> eventosLocales = eventoRepository.findByEstado("ACTIVO");
-
+            List<Evento> eventosLocales = eventoRepository.findByEstado("Activo");
 
             for (Evento evento : eventosLocales) {
                 if (!idsActualizados.contains(evento.getId())) {
-                    evento.setEstado("INACTIVO");
+                    evento.setEstado("Inactivo");
                     eventoRepository.save(evento);
                     log.info("Evento {} marcado como inactivo", evento.getTitulo());
                 }
@@ -109,72 +102,6 @@ public class EventoSyncService {
         } catch (Exception e) {
             log.error("Error marcando eventos eliminados: {}", e.getMessage());
         }
-    }
-    private void generarAsientos(Evento evento) {
-
-        int filas = evento.getFilaAsientos();
-        int columnas = evento.getColumnaAsientos();
-
-        List<Asientos> asientos = new ArrayList<>();
-
-        for (int f = 1; f <= filas; f++) {
-            for (int c = 1; c <= columnas; c++) {
-
-                Asientos asiento = new Asientos();
-                asiento.setFila(f);
-                asiento.setColumna(c);
-                asiento.setEstado("DISPONIBLE");
-                asiento.setEvento(evento);
-
-                asientos.add(asiento);
-            }
-        }
-
-        asientosRepository.saveAll(asientos);
-    }
-
-
-    private void sincronizarAsientos(Evento evento) {
-
-        int filas = evento.getFilaAsientos();
-        int columnas = evento.getColumnaAsientos();
-
-        // Asientos ocupados desde Redis
-        List<AsientosCompletoDTO> ocupados =
-            proxyClient.getAsientosNoDisponibles(evento.getId());
-
-        Map<String, String> estadoPorPosicion = new HashMap<>();
-        for (AsientosCompletoDTO dto : ocupados) {
-            String key = dto.getFila().toString() + "-" + dto.getColumna().toString();
-            estadoPorPosicion.put(key, dto.getEstado());
-        }
-
-        // Eliminar asientos viejos del evento
-        asientosRepository.deleteByEventoId(evento.getId());
-
-        List<Asientos> nuevos = new ArrayList<>();
-
-        // Generar todos los asientos
-        for (int f = 1; f <= filas; f++) {
-            for (int c = 1; c <= columnas; c++) {
-
-                String key = f + "-" + c;
-                String estado = estadoPorPosicion.getOrDefault(key, "DISPONIBLE");
-
-                Asientos asiento = new Asientos();
-                asiento.setFila(f);
-                asiento.setColumna(c);
-                asiento.setEstado(estado);
-                asiento.setEvento(evento);
-
-                nuevos.add(asiento);
-            }
-        }
-
-        asientosRepository.saveAll(nuevos);
-
-        log.info("Asientos sincronizados para evento {} (total: {})",
-            evento.getId(), nuevos.size());
     }
 
 

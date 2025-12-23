@@ -16,10 +16,10 @@ public class CatedraServices {
     public String registrar(String body) {
         return proxyClient.registrar(body);
     }
-    public EventoDTO conseguirEventoPorId(String eventoId) {
+    public EventoExternoDTO conseguirEventoPorId(String eventoId) {
         return proxyClient.conseguirEventoPorId(eventoId);
     }
-    public List<EventoDTO> conseguirEventos() {
+    public List<EventoExternoDTO> conseguirEventos() {
         return proxyClient.conseguirEventos();
     }
     public List<EventoResumidoDTO> conseguirEventosResumidos(){
