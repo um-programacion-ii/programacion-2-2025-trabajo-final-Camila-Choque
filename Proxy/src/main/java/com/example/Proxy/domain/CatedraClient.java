@@ -18,8 +18,7 @@ public class CatedraClient {
 
     private static final Logger logger = LoggerFactory.getLogger(CatedraClient.class);
 
-    private final String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtLmNob3F1ZSIsImV4cCI6MTc2ODQyMTg1NiwiYXV0aCI6IlJPTEVfVVNFUiIsImlhdCI6MTc2NTgyOTg1Nn0.nhHk1qSi41Xy0bYOUp4PVCxtHv6y3UqAZNLBqxOSEz_TKwBXclZoM5yTnsT6KK6GRUJYRZf7FmxF7eZcYbkS_Q";
-
+    private final String token = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJtYXJpLmNob3F1ZSIsImV4cCI6MTc2OTExNjYwOCwiYXV0aCI6IlJPTEVfVVNFUiIsImlhdCI6MTc2NjUyNDYwOH0.zN1Ec0jLCFJwOJEdP8v3zHONLKRn47LKrO94gLVCe1MQZ7ZqI61oXczaGEKXvtxTdVd6rc2Wxj1y_y1_lanPkQ";
     public CatedraClient(WebClient catedraWebClient) {
         this.catedraWebClient = catedraWebClient;
 
@@ -114,6 +113,16 @@ public class CatedraClient {
                 .bodyValue(request)
                 .retrieve()
                 .bodyToMono(BloquearAsientosDTO.class)
+                .block();
+    }
+    public VentaAsientosResponse realizarVenta(VentaAsientosRequest request) {
+        logger.info("Invocando endpoint POST /realizar-venta usando WebClient");
+        return catedraWebClient.post()
+                .uri("/endpoints/v1/realizar-venta")
+                .header("Authorization", "Bearer " + token)
+                .bodyValue(request)
+                .retrieve()
+                .bodyToMono(VentaAsientosResponse.class)
                 .block();
     }
 

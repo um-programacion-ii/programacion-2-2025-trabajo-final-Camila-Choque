@@ -35,4 +35,7 @@ public class ProxyServices {
     public BloquearAsientosDTO bloquearAsientos(BloquearAsientosRequest dto) {
         return catedraClient.bloquearAsientos(dto);
     }
+    public VentaAsientosResponse realizarVenta(VentaAsientosRequest request) {
+        return catedraClient.realizarVenta(request);
+    }
 }

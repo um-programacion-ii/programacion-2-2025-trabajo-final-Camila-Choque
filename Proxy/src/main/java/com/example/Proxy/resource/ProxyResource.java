@@ -41,4 +41,8 @@ public class ProxyResource {
     public BloquearAsientosDTO bloquearAsientos(@RequestBody BloquearAsientosRequest dto) {
         return proxyService.bloquearAsientos(dto);
     }
+    @PostMapping("/venta")
+    public VentaAsientosResponse realizarVenta(@RequestBody VentaAsientosRequest request) {
+        return proxyService.realizarVenta(request);
+    }
 }

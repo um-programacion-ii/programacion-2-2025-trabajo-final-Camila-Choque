@@ -130,4 +130,15 @@ public class ProxyClient {
             .bodyToMono(new ParameterizedTypeReference<Map<String, String>>() {})
             .block();
     }
+
+    public VentaAsientosResponse realizarVenta(VentaAsientosRequest request) {
+        return proxyWebClient.post()
+            .uri("/proxy/venta")
+            .contentType(MediaType.APPLICATION_JSON)
+            .accept(MediaType.APPLICATION_JSON)
+            .bodyValue(request)
+            .retrieve()
+            .bodyToMono(VentaAsientosResponse.class)
+            .block();
+    }
 }

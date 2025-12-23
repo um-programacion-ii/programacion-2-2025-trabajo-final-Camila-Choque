@@ -84,5 +84,9 @@ public class CatedraResources {
     public List<AsientosDisponiblesDTO> getAsientosDisponibles(@PathVariable Long eventoId) {
         return disponibilidadAsientosService.obtenerAsientosDisponibles(eventoId);
     }
+    @PostMapping("/venta")
+    public VentaAsientosResponse realizarVenta(@RequestBody VentaAsientosRequest body) {
+        return catedraServices.realizarVenta(body);
+    }
 
 }
