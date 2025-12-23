@@ -1,4 +1,4 @@
-package org.example.project.proxy
+package org.example.project.estados
 
 sealed class EstadoLogin {
     object Estatico : EstadoLogin()
