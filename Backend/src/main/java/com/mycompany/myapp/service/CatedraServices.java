@@ -55,5 +55,9 @@ public class CatedraServices {
     public Map<String, String> getAllKeysWithValues() {
         return proxyClient.getAllKeysWithValues();
     }
+    public VentaAsientosResponse realizarVenta(VentaAsientosRequest request) {
+        return proxyClient.realizarVenta(request);
+    }
 }
+
 
