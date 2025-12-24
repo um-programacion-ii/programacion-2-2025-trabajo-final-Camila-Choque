@@ -3,20 +3,18 @@ import androidx.compose.runtime.Composable
 import cafe.adriel.voyager.core.screen.Screen
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import org.example.project.interfaz.LoginInterfaz
+import org.example.project.dto.EventoDTO
+import org.example.project.interfaz.AsientosInterfaz
 
-class PantallaLogin: Screen {
+data class PantallaAsientos(val event: EventoDTO) : Screen {
     @Composable
     override fun Content() {
         val navigator = LocalNavigator.currentOrThrow
 
-        LoginInterfaz(
-            onLoginSuccess = {
-                // Navegar a la siguiente pantalla
-                navigator.push(PantallaEvento())
-            }
+        AsientosInterfaz(
+            eventId = event.id,
+            precioUnitario = event.precioEntrada,
+            onBack = { navigator.pop() }
         )
     }
 }
-
-
