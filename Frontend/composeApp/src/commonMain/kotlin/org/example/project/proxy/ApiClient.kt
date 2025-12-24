@@ -18,14 +18,19 @@ import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import org.example.project.config.ApiConfig
+import org.example.project.dto.AsientoDTO
+import org.example.project.dto.BloquearAsientoResponseDTO
+import org.example.project.dto.BloquearAsientosRequestDTO
 import org.example.project.dto.EventoDTO
 import org.example.project.dto.LoginDTO
 import org.example.project.dto.LoginResponseDTO
 import org.example.project.dto.MapaAsientosDTO
+import org.example.project.dto.VentaAsientoRequestDTO
+import org.example.project.dto.VentaAsientosResponseDTO
 
 object ApiClient {
     private var jwtToken: String? = null
-    private var sessionToken: String? = null  // ✅ Agrega esto
+    private var sessionToken: String? = null
 
     private val client = HttpClient {
         install(ContentNegotiation) {
@@ -47,7 +52,7 @@ object ApiClient {
         defaultRequest {
             url(ApiConfig.baseUrl)
             contentType(ContentType.Application.Json)
-            println("🏗️ Base URL configurada: ${ApiConfig.baseUrl}")  // ← Log esto
+            println("🏗️ Base URL configurada: ${ApiConfig.baseUrl}")
         }
     }
 
@@ -66,7 +71,6 @@ object ApiClient {
     fun getToken(): String? = jwtToken
     fun getSessionToken(): String? = sessionToken
 
-    // ✅ Helper para agregar AMBOS tokens
     private fun HttpRequestBuilder.addAuth() {
         jwtToken?.let { token ->
             header("Authorization", "Bearer $token")
@@ -98,7 +102,7 @@ object ApiClient {
             if (response.status.value in 200..299) {
                 val loginResponse: LoginResponseDTO = response.body()
 
-                // ✅ Guarda AMBOS tokens
+
                 setTokens(loginResponse.jwt, loginResponse.sessionToken)
 
                 println("Login exitoso!")
@@ -120,11 +124,11 @@ object ApiClient {
 
     suspend fun getEvents(): Result<List<EventoDTO>> {
         return try {
-            println("GET /v1/service/eventos")
+            println("GET api/catedra/eventos")
             println("Tokens disponibles - JWT: ${jwtToken?.take(30)}, Session: $sessionToken")
 
-            val response: HttpResponse = client.get("/api/v1/service/eventos") {
-                addAuth()  // ✅ Agrega AMBOS tokens
+            val response: HttpResponse = client.get("/api/catedra/eventos") {
+                addAuth()
             }
 
             println("Status code: ${response.status.value}")
@@ -147,11 +151,11 @@ object ApiClient {
     }
     suspend fun getAsientosEvento(eventoId: Long): Result<MapaAsientosDTO> {
         return try {
-            println("GET /api/v1/service/asientos/evento/$eventoId/disponibles")
+            println("GET /api/catedra/asientos/evento/$eventoId/disponibles")
             println("Tokens disponibles - JWT: ${jwtToken?.take(30)}, Session: $sessionToken")
 
-            val response: HttpResponse = client.get("/api/v1/service/asientos/evento/$eventoId/disponibles") {
-                addAuth()  // ✅ Agrega AMBOS tokens
+            val response: HttpResponse = client.get("/api/catedra/asientos/evento/$eventoId/disponibles") {
+                addAuth()
             }
 
             println("Status code: ${response.status.value}")
@@ -167,6 +171,70 @@ object ApiClient {
             }
         } catch (e: Exception) {
             println("Excepción getAsientosEvento: ${e.message}")
+            e.printStackTrace()
+            Result.failure(e)
+        }
+    }
+    suspend fun bloquearAsientos(eventoId: Long, seats: List<AsientoDTO>): Result<BloquearAsientoResponseDTO> {
+        return try {
+            println("Intentando bloquear asientos en: ${ApiConfig.baseUrl}/api/catedra/asientos/evento/$eventoId/bloqueados")
+            println("Request body: ${Json.encodeToString(seats)}")
+            val request = BloquearAsientosRequestDTO(
+                eventoId = eventoId,
+                asientos = seats.map {
+                    AsientoDTO(it.fila, it.columna)
+                }
+            )
+            val response: HttpResponse = client.post("${ApiConfig.baseUrl}/api/catedra/asientos/evento/$eventoId/bloqueados") {
+                addAuth()
+                setBody(request)
+            }
+
+            println("Status code: ${response.status.value}")
+
+            if (response.status.value in 200..299) {
+                val bloqueoResponse: BloquearAsientoResponseDTO = response.body()
+
+                println("Bloqueo exitoso!")
+                println("BloqueoResponse: $bloqueoResponse")
+                Result.success(bloqueoResponse)
+            } else {
+                val errorBody = response.bodyAsText()
+                println("Error: ${response.status} - $errorBody")
+                Result.failure(Exception("Error ${response.status.value}: $errorBody"))
+            }
+        } catch (e: Exception) {
+            println("Excepción bloqueo: ${e.message}")
+            e.printStackTrace()
+            Result.failure(e)
+        }
+    }
+
+    suspend fun venderAsientos(eventoId: Long, request: VentaAsientoRequestDTO): Result<VentaAsientosResponseDTO> {
+        return try {
+            println("Intentando bloquear asientos en: ${ApiConfig.baseUrl}/api/catedra/venta")
+            println("Request body: ${Json.encodeToString(request)}")
+
+            val response: HttpResponse = client.post("${ApiConfig.baseUrl}/api/catedra/venta") {
+                addAuth()
+                setBody(request)
+            }
+
+            println("📡 Status code: ${response.status.value}")
+
+            if (response.status.value in 200..299) {
+                val ventaResponse: VentaAsientosResponseDTO = response.body()
+
+                println("Venta exitosa!")
+                println("VentaResponse: $ventaResponse")
+                Result.success(ventaResponse)
+            } else {
+                val errorBody = response.bodyAsText()
+                println("Error: ${response.status} - $errorBody")
+                Result.failure(Exception("Error ${response.status.value}: $errorBody"))
+            }
+        } catch (e: Exception) {
+            println("Excepción venta: ${e.message}")
             e.printStackTrace()
             Result.failure(e)
         }
