@@ -12,7 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import cafe.adriel.voyager.navigator.LocalNavigator
 import cafe.adriel.voyager.navigator.currentOrThrow
-import org.example.project.Navegacion.PantallaEvento
+import org.example.project.Navegacion.PantallaVenta
 import org.example.project.content.mapaAsientos.SeatMapScreen
 import org.example.project.dto.MapaAsientosDTO
 import org.example.project.proxy.ApiClient
@@ -55,14 +55,13 @@ fun AsientosInterfaz(
                 mapaAsientos = mapaAsientos!!,
                 onSeatsSelected = { seats ->
                     navigator.push(
-                       /*
-                        SeatDetailsScreen(
+
+                        PantallaVenta(
                             eventoId = eventId,
                             seats = seats,
                             precioUnitario = precioUnitario
                         )
-                        */
-                        PantallaEvento()
+
                     )
                 },
                 onBack = onBack
