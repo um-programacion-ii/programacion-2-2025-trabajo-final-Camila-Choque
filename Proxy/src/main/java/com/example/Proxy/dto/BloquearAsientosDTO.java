@@ -8,7 +8,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BloquearAsientosDTO {
-    private Boolean resultados;
+    private Boolean resultado;
     private String descripcion;
     private Integer eventoId;
     private List<AsientosCompletosDTO> asientos;

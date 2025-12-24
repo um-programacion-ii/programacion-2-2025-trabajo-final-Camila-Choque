@@ -12,8 +12,7 @@ class PantallaEvento: Screen {
 
         EventoInterfaz(
             onEventClick = { event ->
-                //navigator.push(EventDetailScreen(event))
-                TODO()
+                navigator.push(PantallaAsientos(event))
             }
         )
     }

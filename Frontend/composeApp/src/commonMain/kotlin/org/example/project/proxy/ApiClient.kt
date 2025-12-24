@@ -177,7 +177,7 @@ object ApiClient {
     }
     suspend fun bloquearAsientos(eventoId: Long, seats: List<AsientoDTO>): Result<BloquearAsientoResponseDTO> {
         return try {
-            println("Intentando bloquear asientos en: ${ApiConfig.baseUrl}/api/catedra/asientos/evento/$eventoId/bloqueados")
+            println("Intentando bloquear asientos en: ${ApiConfig.baseUrl}/api/catedra/bloqueo-asientos")
             println("Request body: ${Json.encodeToString(seats)}")
             val request = BloquearAsientosRequestDTO(
                 eventoId = eventoId,
@@ -185,7 +185,7 @@ object ApiClient {
                     AsientoDTO(it.fila, it.columna)
                 }
             )
-            val response: HttpResponse = client.post("${ApiConfig.baseUrl}/api/catedra/asientos/evento/$eventoId/bloqueados") {
+            val response: HttpResponse = client.post("${ApiConfig.baseUrl}/api/catedra/bloqueo-asientos") {
                 addAuth()
                 setBody(request)
             }
