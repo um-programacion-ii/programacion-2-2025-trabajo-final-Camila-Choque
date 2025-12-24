@@ -27,11 +27,11 @@ public class AsientosDisponiblesService {
     }
 
     public MapaAsientosDTO obtenerMapaAsientos(Long eventoId) {
-
+        /*
         Evento evento = eventoRepository.findById(eventoId)
             .orElseThrow(() -> new IllegalArgumentException("Evento inexistente"));
-
-        // Redis
+        */
+        EventoExternoDTO evento = catedraServices.conseguirEventoPorId(eventoId.toString());
         AsientosRedisDTO redisDTO = catedraServices.getAsientos(eventoId);
 
         Map<String, String> estadoPorPosicion = new HashMap<>();
@@ -52,7 +52,7 @@ public class AsientosDisponiblesService {
         for (int f = 1; f <= evento.getFilaAsientos(); f++) {
             List<FilaAsientosDTO.AsientoEstadoDTO> columnas = new ArrayList<>();
 
-            for (int c = 1; c <= evento.getColumnaAsientos(); c++) {
+            for (int c = 1; c <= evento.getColumnAsientos(); c++) {
                 String key = f + "-" + c;
                 String estado = estadoPorPosicion.getOrDefault(key, "DISPONIBLE");
 
@@ -65,7 +65,7 @@ public class AsientosDisponiblesService {
         return new MapaAsientosDTO(
             eventoId,
             evento.getFilaAsientos(),
-            evento.getColumnaAsientos(),
+            evento.getColumnAsientos(),
             filas
         );
     }
