@@ -21,6 +21,7 @@ import org.example.project.config.ApiConfig
 import org.example.project.dto.EventoDTO
 import org.example.project.dto.LoginDTO
 import org.example.project.dto.LoginResponseDTO
+import org.example.project.dto.MapaAsientosDTO
 
 object ApiClient {
     private var jwtToken: String? = null
@@ -77,14 +78,14 @@ object ApiClient {
         }
 
         if (jwtToken == null || sessionToken == null) {
-            println("⚠️ Faltan tokens! JWT: ${jwtToken != null}, Session: ${sessionToken != null}")
+            println("Faltan tokens! JWT: ${jwtToken != null}, Session: ${sessionToken != null}")
         }
     }
 
     suspend fun login(request: LoginDTO): Result<String> {
         return try {
-            println("🚀 Intentando login a: ${ApiConfig.baseUrl}/api/authenticate")
-            println("📦 Request body: ${Json.encodeToString(request)}")
+            println("Intentando login a: ${ApiConfig.baseUrl}/api/authenticate")
+            println(" Request body: ${Json.encodeToString(request)}")
 
             val response: HttpResponse = client.post {
                 url("${ApiConfig.baseUrl}/api/authenticate")
@@ -92,7 +93,7 @@ object ApiClient {
                 setBody(request)
             }
 
-            println("📡 Status code: ${response.status.value}")
+            println("Status code: ${response.status.value}")
 
             if (response.status.value in 200..299) {
                 val loginResponse: LoginResponseDTO = response.body()
@@ -100,18 +101,18 @@ object ApiClient {
                 // ✅ Guarda AMBOS tokens
                 setTokens(loginResponse.jwt, loginResponse.sessionToken)
 
-                println("✅ Login exitoso!")
-                println("📝 JWT guardado: ${loginResponse.jwt.take(30)}...")
-                println("📝 Session guardado: ${loginResponse.sessionToken}")
+                println("Login exitoso!")
+                println("JWT guardado: ${loginResponse.jwt.take(30)}...")
+                println("Session guardado: ${loginResponse.sessionToken}")
 
                 Result.success(loginResponse.jwt)
             } else {
                 val errorBody = response.bodyAsText()
-                println("❌ Error: ${response.status} - $errorBody")
+                println("Error: ${response.status} - $errorBody")
                 Result.failure(Exception("Error ${response.status.value}: $errorBody"))
             }
         } catch (e: Exception) {
-            println("💥 Excepción login: ${e.message}")
+            println("Excepción login: ${e.message}")
             e.printStackTrace()
             Result.failure(e)
         }
@@ -119,15 +120,15 @@ object ApiClient {
 
     suspend fun getEvents(): Result<List<EventoDTO>> {
         return try {
-            println("🚀 GET /v1/service/eventos")
-            println("🔍 Tokens disponibles - JWT: ${jwtToken?.take(30)}, Session: $sessionToken")
+            println("GET /v1/service/eventos")
+            println("Tokens disponibles - JWT: ${jwtToken?.take(30)}, Session: $sessionToken")
 
             val response: HttpResponse = client.get("/api/v1/service/eventos") {
                 addAuth()  // ✅ Agrega AMBOS tokens
             }
 
-            println("📡 Status code: ${response.status.value}")
-            println("📋 Headers enviados: ${response.request.headers.entries()}")
+            println("Status code: ${response.status.value}")
+            println("Headers enviados: ${response.request.headers.entries()}")
 
             if (response.status.value in 200..299) {
                 val events: List<EventoDTO> = response.body()
@@ -135,11 +136,37 @@ object ApiClient {
                 Result.success(events)
             } else {
                 val errorBody = response.bodyAsText()
-                println("❌ Error ${response.status.value}: $errorBody")
+                println("Error ${response.status.value}: $errorBody")
                 Result.failure(Exception("Error ${response.status.value}: $errorBody"))
             }
         } catch (e: Exception) {
-            println("💥 Excepción getEvents: ${e.message}")
+            println("Excepción getEvents: ${e.message}")
+            e.printStackTrace()
+            Result.failure(e)
+        }
+    }
+    suspend fun getAsientosEvento(eventoId: Long): Result<MapaAsientosDTO> {
+        return try {
+            println("GET /api/v1/service/asientos/evento/$eventoId/disponibles")
+            println("Tokens disponibles - JWT: ${jwtToken?.take(30)}, Session: $sessionToken")
+
+            val response: HttpResponse = client.get("/api/v1/service/asientos/evento/$eventoId/disponibles") {
+                addAuth()  // ✅ Agrega AMBOS tokens
+            }
+
+            println("Status code: ${response.status.value}")
+            println("Headers enviados: ${response.request.headers.entries()}")
+
+            if (response.status.value in 200..299) {
+                val asientos: MapaAsientosDTO = response.body()
+                Result.success(asientos)
+            } else {
+                val errorBody = response.bodyAsText()
+                println("Error ${response.status.value}: $errorBody")
+                Result.failure(Exception("Error ${response.status.value}: $errorBody"))
+            }
+        } catch (e: Exception) {
+            println("Excepción getAsientosEvento: ${e.message}")
             e.printStackTrace()
             Result.failure(e)
         }
