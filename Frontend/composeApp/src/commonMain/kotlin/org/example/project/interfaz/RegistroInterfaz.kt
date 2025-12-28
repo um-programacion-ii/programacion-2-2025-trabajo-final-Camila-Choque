@@ -37,8 +37,11 @@ fun RegistroInterfaz(
     val viewModel = remember { ModeloRegistro() }
     val scope = rememberCoroutineScope()
 
-    var username by remember { mutableStateOf("") }
+    var login by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var nombre by remember { mutableStateOf("") }
+    var apellido by remember { mutableStateOf("") }
 
     val state by viewModel.uiState.collectAsState()
 
@@ -62,8 +65,8 @@ fun RegistroInterfaz(
         )
 
         TextField(
-            value = username,
-            onValueChange = { username = it },
+            value = login,
+            onValueChange = { login = it },
             label = { Text("Usuario") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -78,12 +81,39 @@ fun RegistroInterfaz(
             modifier = Modifier.fillMaxWidth()
         )
 
+        Spacer(Modifier.height(16.dp))
+
+        TextField(
+            value = email,
+            onValueChange = { email = it },
+            label = { Text("Email") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        TextField(
+            value = nombre,
+            onValueChange = { nombre = it },
+            label = { Text("Nombre") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(Modifier.height(16.dp))
+
+        TextField(
+            value = apellido,
+            onValueChange = { apellido = it },
+            label = { Text("Apellido") },
+            modifier = Modifier.fillMaxWidth()
+        )
+
         Spacer(Modifier.height(24.dp))
 
         Button(
             onClick = {
                 scope.launch {
-                    viewModel.registrar(username, password)
+                    viewModel.registrar(login, password, email, nombre, apellido)
                 }
             },
             modifier = Modifier.fillMaxWidth(),

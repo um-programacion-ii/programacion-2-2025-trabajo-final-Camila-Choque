@@ -2,7 +2,7 @@ package org.example.project.proxy
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import org.example.project.dto.LoginDTO
+import org.example.project.dto.RegistrarDTO
 import org.example.project.estados.EstadoRegistro
 
 class ModeloRegistro {
@@ -10,15 +10,24 @@ class ModeloRegistro {
     private val _uiState = MutableStateFlow<EstadoRegistro>(EstadoRegistro.Estatico)
     val uiState: StateFlow<EstadoRegistro> = _uiState.asStateFlow()
 
-    suspend fun registrar(username: String, password: String) {
-        if (username.isBlank() || password.isBlank()) {
+    suspend fun registrar(login: String, password: String, email: String, firstName: String, lastName: String) {
+        if (login.isBlank() || password.isBlank()) {
             _uiState.value = EstadoRegistro.Error("Usuario y contraseña son requeridos")
             return
         }
 
         _uiState.value = EstadoRegistro.Cargando
 
-        val result = ApiClient.registrar(LoginDTO(username, password))
+        val result = ApiClient.registrar(
+            RegistrarDTO(
+                login,
+                password,
+                email,
+                firstName,
+                lastName,
+                "es"
+            )
+        )
 
         result.fold(
             onSuccess = {

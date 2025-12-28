@@ -1,6 +1,9 @@
 package com.mycompany.myapp.service;
+import com.mycompany.myapp.domain.User;
 import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
+import com.mycompany.myapp.repository.UserRepository;
 import com.mycompany.myapp.repository.VentaRepository;
+import com.mycompany.myapp.security.SecurityUtils;
 import com.mycompany.myapp.service.client.ProxyClient;
 import com.mycompany.myapp.service.dto.*;
 import org.springframework.stereotype.Service;
@@ -12,10 +15,12 @@ import java.util.Set;
 public class CatedraServices {
     private final ProxyClient proxyClient;
     private final VentaRepository ventaRepository;
+    private final UserRepository userRepository;
 
-    public CatedraServices(ProxyClient proxyClient, VentaRepository ventaRepository) {
+    public CatedraServices(ProxyClient proxyClient, VentaRepository ventaRepository, UserRepository userRepository) {
         this.proxyClient = proxyClient;
         this.ventaRepository = ventaRepository;
+        this.userRepository = userRepository;
     }
     public String registrar(String body) {
         return proxyClient.registrar(body);
@@ -72,6 +77,9 @@ public class CatedraServices {
             venta.setDescripcion(response.getDescripcion());
             venta.setCantidadAsientos(response.getAsientos().size());
             venta.setEstado("COMPLETADA");
+            String login = SecurityUtils.getCurrentUserLogin().orElseThrow(() -> new RuntimeException("Usuario no autenticado"));
+            User user = userRepository.findOneByLogin(login).orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+            venta.setUser(user);
             ventaRepository.save(venta);
         }
         return response;
