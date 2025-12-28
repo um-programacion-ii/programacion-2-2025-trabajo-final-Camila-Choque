@@ -4,7 +4,6 @@ import com.mycompany.myapp.infrastructure.web.dto.VentaResponse;
 import com.mycompany.myapp.infrastructure.web.mapper.VentaDtoMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
@@ -24,11 +23,10 @@ public class VentaController {
         this.ventaDtoMapper = ventaDtoMapper;
     }
 
-    @GetMapping("/usuario/{userId}")
+    @GetMapping("/usuario")
     public ResponseEntity<List<VentaResponse>> obtenerVentasPorUsuario(
-        @PathVariable Long userId
     ) {
-        List<VentaResponse> response = obtenerVentasPorUsuarioUseCase.obtenerVentasPorUsuario(userId)
+        List<VentaResponse> response = obtenerVentasPorUsuarioUseCase.obtenerVentasPorUsuario()
             .stream()
             .map(ventaDtoMapper::toResponse)
             .toList();

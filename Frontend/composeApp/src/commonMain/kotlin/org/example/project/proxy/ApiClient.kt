@@ -265,14 +265,14 @@ object ApiClient {
             println("GET /api/compras/mis-compras")
             println("Tokens disponibles - JWT: ${jwtToken?.take(30)}, Session: $sessionToken")
 
-            val response: HttpResponse = client.get("/api/compras/mis-compras") {
+            val response: HttpResponse = client.get("/api/ventas/usuario") {
                 addAuth()
             }
 
             println(" Status code: ${response.status.value}")
 
             if (response.status.value in 200..299) {
-                val compras: List<CompraDTO> = response.body()
+                val compras = response.body<List<CompraDTO>>()
                 println(" ${compras.size} compras cargadas")
                 Result.success(compras)
             } else {

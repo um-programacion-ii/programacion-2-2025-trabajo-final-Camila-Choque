@@ -4,5 +4,5 @@ import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
 import java.util.List;
 
 public interface RegistroComprasUseCase {
-    List<VentaModel> obtenerVentasPorUsuario(Long id);
+    List<VentaModel> obtenerVentasPorUsuario();
 }

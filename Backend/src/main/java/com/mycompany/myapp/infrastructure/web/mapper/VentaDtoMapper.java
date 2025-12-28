@@ -1,10 +1,8 @@
 package com.mycompany.myapp.infrastructure.web.mapper;
-
 import com.mycompany.myapp.domain.model.VentaModel;
 import com.mycompany.myapp.infrastructure.web.dto.AsientoResponse;
 import com.mycompany.myapp.infrastructure.web.dto.VentaResponse;
 import org.springframework.stereotype.Component;
-
 import java.util.List;
 
 @Component
@@ -15,13 +13,7 @@ public class VentaDtoMapper {
             return null;
         }
 
-        List<AsientoResponse> asientos = model.getAsientos()
-            .stream()
-            .map(a -> new AsientoResponse(
-                a.getFila(),
-                a.getColumna()
-            ))
-            .toList();
+        List<AsientoResponse> asientos = null;
 
         return new VentaResponse(
             model.getId(),

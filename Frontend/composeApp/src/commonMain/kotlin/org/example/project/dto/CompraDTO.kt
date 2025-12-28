@@ -1,5 +1,7 @@
 package org.example.project.dto
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class CompraDTO (
     val id: Long?= null ,
     val ventaIdCatedra: Long?= null,
