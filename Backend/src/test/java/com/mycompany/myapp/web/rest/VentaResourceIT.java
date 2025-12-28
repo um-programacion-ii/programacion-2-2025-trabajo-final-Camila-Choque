@@ -9,7 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mycompany.myapp.IntegrationTest;
-import com.mycompany.myapp.domain.Venta;
+import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
 import com.mycompany.myapp.repository.VentaRepository;
 import com.mycompany.myapp.service.dto.VentaDTO;
 import com.mycompany.myapp.service.mapper.VentaMapper;

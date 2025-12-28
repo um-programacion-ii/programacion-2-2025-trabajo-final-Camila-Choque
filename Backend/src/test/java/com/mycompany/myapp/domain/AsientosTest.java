@@ -6,6 +6,7 @@ import static com.mycompany.myapp.domain.SesionTestSamples.*;
 import static com.mycompany.myapp.domain.VentaTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
 import com.mycompany.myapp.web.rest.TestUtil;
 import org.junit.jupiter.api.Test;
 

@@ -1,5 +1,7 @@
 package com.mycompany.myapp.domain;
 
+import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
+
 import java.util.Random;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;

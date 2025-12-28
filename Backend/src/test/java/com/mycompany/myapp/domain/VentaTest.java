@@ -4,6 +4,7 @@ import static com.mycompany.myapp.domain.AsientosTestSamples.*;
 import static com.mycompany.myapp.domain.VentaTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
 import com.mycompany.myapp.web.rest.TestUtil;
 import java.util.HashSet;
 import java.util.Set;

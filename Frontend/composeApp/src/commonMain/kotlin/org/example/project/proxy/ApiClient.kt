@@ -21,6 +21,7 @@ import org.example.project.config.ApiConfig
 import org.example.project.dto.AsientoDTO
 import org.example.project.dto.BloquearAsientoResponseDTO
 import org.example.project.dto.BloquearAsientosRequestDTO
+import org.example.project.dto.CompraDTO
 import org.example.project.dto.EventoDTO
 import org.example.project.dto.LoginDTO
 import org.example.project.dto.LoginResponseDTO
@@ -74,17 +75,36 @@ object ApiClient {
     private fun HttpRequestBuilder.addAuth() {
         jwtToken?.let { token ->
             header("Authorization", "Bearer $token")
-            println("🔑 Authorization header agregado")
+            println("Authorization header agregado")
         }
         sessionToken?.let { session ->
             header("X-SESSION-TOKEN", session)
-            println("🎫 X-SESSION-TOKEN header agregado")
+            println(" X-SESSION-TOKEN header agregado")
         }
 
         if (jwtToken == null || sessionToken == null) {
             println("Faltan tokens! JWT: ${jwtToken != null}, Session: ${sessionToken != null}")
         }
     }
+    suspend fun registrar(request: LoginDTO): Result<Unit> {
+        return try {
+            val response: HttpResponse = client.post {
+                url("${ApiConfig.baseUrl}/api/register")
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }
+
+            if (response.status.value in 200..299) {
+                Result.success(Unit)
+            } else {
+                val errorBody = response.bodyAsText()
+                Result.failure(Exception(errorBody))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 
     suspend fun login(request: LoginDTO): Result<String> {
         return try {
@@ -239,5 +259,32 @@ object ApiClient {
             Result.failure(e)
         }
     }
+    suspend fun getMisCompras(): Result<List<CompraDTO>> {
+        return try {
+            println("GET /api/compras/mis-compras")
+            println("Tokens disponibles - JWT: ${jwtToken?.take(30)}, Session: $sessionToken")
+
+            val response: HttpResponse = client.get("/api/compras/mis-compras") {
+                addAuth()
+            }
+
+            println(" Status code: ${response.status.value}")
+
+            if (response.status.value in 200..299) {
+                val compras: List<CompraDTO> = response.body()
+                println(" ${compras.size} compras cargadas")
+                Result.success(compras)
+            } else {
+                val errorBody = response.bodyAsText()
+                println(" Error ${response.status.value}: $errorBody")
+                Result.failure(Exception("Error ${response.status.value}: $errorBody"))
+            }
+        } catch (e: Exception) {
+            println(" Excepción getMisCompras: ${e.message}")
+            e.printStackTrace()
+            Result.failure(e)
+        }
+    }
+
 }
 
