@@ -1,6 +1,6 @@
 package com.mycompany.myapp.service.mapper;
 
-import com.mycompany.myapp.domain.Venta;
+import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
 import com.mycompany.myapp.service.dto.VentaDTO;
 import org.mapstruct.*;
 

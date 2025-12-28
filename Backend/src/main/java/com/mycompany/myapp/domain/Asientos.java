@@ -1,6 +1,7 @@
 package com.mycompany.myapp.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
 import jakarta.persistence.*;
 import java.io.Serializable;
 

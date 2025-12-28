@@ -1,6 +1,6 @@
 package com.mycompany.myapp.service.impl;
 
-import com.mycompany.myapp.domain.Venta;
+import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
 import com.mycompany.myapp.repository.VentaRepository;
 import com.mycompany.myapp.service.VentaService;
 import com.mycompany.myapp.service.dto.VentaDTO;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service Implementation for managing {@link com.mycompany.myapp.domain.Venta}.
+ * Service Implementation for managing {@link Venta}.
  */
 @Service
 @Transactional

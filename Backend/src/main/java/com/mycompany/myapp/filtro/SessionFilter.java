@@ -29,6 +29,7 @@ public class SessionFilter extends OncePerRequestFilter {
 
         return path.startsWith("/api/authenticate")
             || path.startsWith("/api/internal/")
+            || path.startsWith("/api/register")
             || path.startsWith("/h2-console")
             || path.startsWith("/actuator/")
             || path.startsWith("/swagger")

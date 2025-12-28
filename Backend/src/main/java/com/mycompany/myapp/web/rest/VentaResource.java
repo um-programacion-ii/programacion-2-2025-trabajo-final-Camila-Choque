@@ -1,5 +1,6 @@
 package com.mycompany.myapp.web.rest;
 
+import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
 import com.mycompany.myapp.repository.VentaRepository;
 import com.mycompany.myapp.service.VentaService;
 import com.mycompany.myapp.service.dto.VentaDTO;
@@ -18,7 +19,7 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
- * REST controller for managing {@link com.mycompany.myapp.domain.Venta}.
+ * REST controller for managing {@link Venta}.
  */
 @RestController
 @RequestMapping("/api/ventas")

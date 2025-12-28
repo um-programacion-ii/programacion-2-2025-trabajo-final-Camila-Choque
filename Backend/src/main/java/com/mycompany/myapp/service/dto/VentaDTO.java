@@ -1,11 +1,13 @@
 package com.mycompany.myapp.service.dto;
 
+import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
+
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 
 /**
- * A DTO for the {@link com.mycompany.myapp.domain.Venta} entity.
+ * A DTO for the {@link Venta} entity.
  */
 @SuppressWarnings("common-java:DuplicatedBlocks")
 public class VentaDTO implements Serializable {

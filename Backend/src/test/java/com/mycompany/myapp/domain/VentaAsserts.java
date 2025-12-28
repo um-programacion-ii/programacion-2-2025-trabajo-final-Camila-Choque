@@ -1,5 +1,7 @@
 package com.mycompany.myapp.domain;
 
+import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class VentaAsserts {

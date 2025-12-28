@@ -1,6 +1,6 @@
 package com.mycompany.myapp.repository;
 
-import com.mycompany.myapp.domain.Venta;
+import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
 import org.springframework.data.jpa.repository.*;
 import org.springframework.stereotype.Repository;
 

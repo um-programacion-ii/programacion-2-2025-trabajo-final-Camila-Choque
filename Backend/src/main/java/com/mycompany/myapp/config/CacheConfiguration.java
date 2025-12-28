@@ -5,6 +5,8 @@ import java.util.concurrent.TimeUnit;
 import javax.cache.configuration.MutableConfiguration;
 import javax.cache.expiry.CreatedExpiryPolicy;
 import javax.cache.expiry.Duration;
+
+import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
 import org.redisson.Redisson;
 import org.redisson.config.ClusterServersConfig;
 import org.redisson.config.Config;
@@ -16,7 +18,6 @@ import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.info.GitProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.context.annotation.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tech.jhipster.config.JHipsterProperties;
@@ -77,11 +78,11 @@ public class CacheConfiguration {
             createCache(cm, com.mycompany.myapp.domain.Usuario.class.getName(), jcacheConfiguration);
             createCache(cm, com.mycompany.myapp.domain.Evento.class.getName(), jcacheConfiguration);
             createCache(cm, com.mycompany.myapp.domain.Integrantes.class.getName(), jcacheConfiguration);
-            createCache(cm, com.mycompany.myapp.domain.Venta.class.getName(), jcacheConfiguration);
+            createCache(cm, Venta.class.getName(), jcacheConfiguration);
             createCache(cm, com.mycompany.myapp.domain.Asientos.class.getName(), jcacheConfiguration);
             createCache(cm, com.mycompany.myapp.domain.Sesion.class.getName(), jcacheConfiguration);
             createCache(cm, com.mycompany.myapp.domain.Evento.class.getName() + ".integrantes", jcacheConfiguration);
-            createCache(cm, com.mycompany.myapp.domain.Venta.class.getName() + ".asientos", jcacheConfiguration);
+            createCache(cm, Venta.class.getName() + ".asientos", jcacheConfiguration);
             createCache(cm, com.mycompany.myapp.domain.Sesion.class.getName() + ".asientos", jcacheConfiguration);
             createCache(cm, com.mycompany.myapp.domain.Evento.class.getName() + ".asientos", jcacheConfiguration);
             // jhipster-needle-redis-add-entry

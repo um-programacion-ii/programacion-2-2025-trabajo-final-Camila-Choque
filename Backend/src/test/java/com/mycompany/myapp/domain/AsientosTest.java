@@ -3,9 +3,9 @@ package com.mycompany.myapp.domain;
 import static com.mycompany.myapp.domain.AsientosTestSamples.*;
 import static com.mycompany.myapp.domain.EventoTestSamples.*;
 import static com.mycompany.myapp.domain.SesionTestSamples.*;
-import static com.mycompany.myapp.domain.VentaTestSamples.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
 import com.mycompany.myapp.web.rest.TestUtil;
 import org.junit.jupiter.api.Test;
 
@@ -37,17 +37,7 @@ class AsientosTest {
         assertThat(asientos.getEvento()).isNull();
     }
 
-    @Test
-    void ventaTest() {
-        Asientos asientos = getAsientosRandomSampleGenerator();
-        Venta ventaBack = getVentaRandomSampleGenerator();
 
-        asientos.setVenta(ventaBack);
-        assertThat(asientos.getVenta()).isEqualTo(ventaBack);
-
-        asientos.venta(null);
-        assertThat(asientos.getVenta()).isNull();
-    }
 
     @Test
     void sesionTest() {

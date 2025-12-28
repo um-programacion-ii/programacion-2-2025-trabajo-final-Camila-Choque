@@ -1,11 +1,12 @@
 package com.mycompany.myapp.service;
 
+import com.mycompany.myapp.infrastructure.persistence.entity.Venta;
 import com.mycompany.myapp.service.dto.VentaDTO;
 import java.util.List;
 import java.util.Optional;
 
 /**
- * Service Interface for managing {@link com.mycompany.myapp.domain.Venta}.
+ * Service Interface for managing {@link Venta}.
  */
 public interface VentaService {
     /**
