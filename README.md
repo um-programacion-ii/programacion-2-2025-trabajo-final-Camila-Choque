@@ -48,9 +48,13 @@ Aplicación desarrollada en Kotlin Multiplatform (KMP) que permite a los usuario
 ### ▶️ En caso de que no esten funcionando ejecutar el siguiente comando
     sudo docker start kafka
     sudo docker start zookeeper
+### ▶️ Ejecutamos el backend
+      ./mvnw
 ### ▶️ En otra terminal dentro del proyecto navegamos al directorio Proxy
      cd Proxy/
-### ▶️ Abrimos la carpeta frontend/ en Android Studio y ejecutamos el emulador.
+### ▶️ Ejecutamos el proxy
+      mvn spring-boot:run
+### ▶️ Abrimos la carpeta frontend/ en Android Studio y ejecutamos el emulador
 
 
 
